@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Daftar - RuangPikiran</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            font-family: Arial, sans-serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #27204a,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #172f45,
+                    transparent 35%
+                ),
+                #0d0d14;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 430px;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            background: rgba(255,255,255,0.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.1);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0,0,0,0.35);
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 26px;
+
+            font-weight: bold;
+
+            margin-bottom: 35px;
+        }
+
+        .logo span {
+            color: #9b7cff;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #9997a8;
+
+            line-height: 1.6;
+
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            color: #c7c5d0;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            margin-bottom: 18px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.1);
+
+            outline: none;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            color: white;
+
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #9b7cff;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9b7cff,
+                    #6d5ce7
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .login {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #888697;
+
+            font-size: 14px;
+        }
+
+        .login a {
+            color: #9b7cff;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="register-box">
+
+        <div class="logo">
+            Ruang<span>Pikiran</span>
+        </div>
+
+
+        <h1>
+            Buat akun
+        </h1>
+
+
+        <p class="description">
+            Buat ruang pribadimu untuk
+            menuangkan apa yang ada di pikiranmu.
+        </p>
+
+
+        <form id="registerForm">
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                id="email"
+                type="email"
+                placeholder="nama@email.com"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Minimal 6 karakter"
+                minlength="6"
+                required
+            >
+
+
+            <label for="confirmPassword">
+                Ulangi Password
+            </label>
+
+            <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Masukkan password lagi"
+                minlength="6"
+                required
+            >
+
+
+            <button type="submit">
+                Buat Akun
+            </button>
+
+        </form>
+
+
+        <div class="login">
+
+            Sudah punya akun?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL = "https://gcaztzukpotpsdkcjkwn.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_WxAteQaZ4GOUrNcZy9Y5bg_aq6UlgS9";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+    document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
+
+
+            const confirmPassword =
+                document
+                    .getElementById("confirmPassword")
+                    .value;
+
+
+            // Cek password
+
+            if (password !== confirmPassword) {
+
+                alert("Password tidak sama.");
+
+                return;
+            }
+
+
+            // Daftar ke Supabase
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password
+
+            });
+
+
+            if (error) {
+
+                alert(
+                    "Gagal membuat akun: " +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            alert(
+                "Akun berhasil dibuat!"
+            );
+
+
+            document
+                .getElementById("registerForm")
+                .reset();
+
+        });
+</script>
+
+</body>
+
+</html>
