@@ -23,6 +23,295 @@
             min-height: 100vh;
         }
 
+        /* =========================
+   EDIT NOTE MODAL - MODERN
+========================= */
+
+#editModal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(5, 5, 12, 0.72);
+
+    backdrop-filter: blur(10px);
+
+    z-index: 9999;
+}
+
+
+/* BOX */
+
+#editModal .modal-content {
+    width: min(520px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 28px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,30,45,0.96),
+            rgba(18,18,28,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.5);
+
+    animation:
+        editModalIn 0.22s ease;
+}
+
+
+/* ANIMASI */
+
+@keyframes editModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* HEADER */
+
+#editModal .modal-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+#editModal .modal-header h2 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 21px;
+}
+
+
+/* CLOSE */
+
+#editModal .close-btn {
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#editModal .close-btn:hover {
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #fff;
+
+    transform: rotate(5deg);
+}
+
+
+/* LABEL */
+
+#editModal label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* INPUT & TEXTAREA */
+
+#editModal input,
+#editModal textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    color: #fff;
+
+    padding: 12px 14px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+#editModal textarea {
+    min-height: 150px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+#editModal input:focus,
+#editModal textarea:focus {
+
+    background:
+        rgba(255,255,255,0.065);
+
+    border-color:
+        rgba(155,124,255,0.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(155,124,255,0.10);
+}
+
+
+/* GROUP */
+
+#editModal .form-group {
+    margin-bottom: 18px;
+}
+
+
+/* BUTTON AREA */
+
+#editModal .modal-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-top: 24px;
+}
+
+
+/* CANCEL */
+
+#editModal .cancel-btn {
+
+    padding: 10px 16px;
+
+    border-radius: 11px;
+
+    border: 1px solid
+        rgba(255,255,255,0.08);
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#editModal .cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #fff;
+}
+
+
+/* SAVE */
+
+#editModal .save-btn {
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9b7cff,
+            #6f5ce7
+        );
+
+    color: #fff;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 20px
+        rgba(120,90,240,0.25);
+
+    transition: 0.2s;
+}
+
+#editModal .save-btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(120,90,240,0.35);
+}
+
                 /* =========================
    DASHBOARD
 ========================= */
@@ -217,22 +506,38 @@
 ========================= */
 
 .note-actions {
+
     display: flex;
+
     gap: 8px;
+
     margin-top: 14px;
+
 }
 
-.note-actions button {
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.75);
 
-    padding: 7px 12px;
+/* STYLE DASAR KHUSUS EDIT & HAPUS */
 
-    border-radius: 9px;
+.note-actions .edit-btn,
+.note-actions .delete-btn {
 
-    font-size: 13px;
-    font-weight: 500;
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 8px 12px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 600;
 
     cursor: pointer;
 
@@ -240,29 +545,88 @@
         background 0.2s ease,
         color 0.2s ease,
         transform 0.2s ease,
-        border-color 0.2s ease;
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.note-actions button:hover {
-    background: rgba(255,255,255,0.10);
-    color: #fff;
 
-    transform: translateY(-1px);
+/* EDIT */
+
+.note-actions .edit-btn {
+
+    background:
+        rgba(155,124,255,0.10);
+
+    color:
+        #b9a8ff;
+
+    border:
+        1px solid rgba(155,124,255,0.18);
+}
+
+
+.note-actions .edit-btn:hover {
+
+    background:
+        rgba(155,124,255,0.20);
+
+    color:
+        #d2c8ff;
 
     border-color:
-        rgba(255,255,255,0.15);
+        rgba(155,124,255,0.35);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(155,124,255,0.15);
 }
+
+
+/* HAPUS */
 
 .note-actions .delete-btn {
-    color: #ff8f9a;
+
+    background:
+        rgba(255,90,110,0.08);
+
+    color:
+        #ff929f;
+
+    border:
+        1px solid rgba(255,90,110,0.16);
 }
 
+
 .note-actions .delete-btn:hover {
-    background: rgba(255,80,100,0.12);
-    color: #ff6978;
+
+    background:
+        rgba(255,90,110,0.17);
+
+    color:
+        #ffabb5;
 
     border-color:
-        rgba(255,80,100,0.20);
+        rgba(255,90,110,0.30);
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(255,90,110,0.12);
+}
+
+
+/* SAAT DITEKAN */
+
+.note-actions .edit-btn:active,
+.note-actions .delete-btn:active {
+
+    transform:
+        scale(0.95);
 }
 
 /* =========================
@@ -295,6 +659,110 @@
         transform 0.25s ease,
         border-color 0.25s ease,
         box-shadow 0.25s ease;
+}
+
+/* =========================
+   MOOD ACCENT
+========================= */
+
+.note-card {
+    --mood-color:
+        rgba(155,124,255,0.35);
+
+    --mood-glow:
+        rgba(155,124,255,0.12);
+}
+
+
+/* 😊 SENANG */
+
+.note-card.mood-😊 {
+    --mood-color:
+        rgba(255,211,92,0.45);
+
+    --mood-glow:
+        rgba(255,211,92,0.12);
+}
+
+
+/* 😍 CINTA */
+
+.note-card.mood-😍 {
+    --mood-color:
+        rgba(255,105,150,0.45);
+
+    --mood-glow:
+        rgba(255,105,150,0.12);
+}
+
+
+/* 😢 SEDIH */
+
+.note-card.mood-😢 {
+    --mood-color:
+        rgba(90,170,255,0.45);
+
+    --mood-glow:
+        rgba(90,170,255,0.12);
+}
+
+
+/* 😡 MARAH */
+
+.note-card.mood-😡 {
+    --mood-color:
+        rgba(255,90,90,0.45);
+
+    --mood-glow:
+        rgba(255,90,90,0.12);
+}
+
+
+/* 😴 LELAH */
+
+.note-card.mood-😴 {
+    --mood-color:
+        rgba(130,145,220,0.45);
+
+    --mood-glow:
+        rgba(130,145,220,0.12);
+}
+
+
+/* 😐 BIASA */
+
+.note-card.mood-😐 {
+    --mood-color:
+        rgba(170,170,180,0.35);
+
+    --mood-glow:
+        rgba(170,170,180,0.08);
+}
+
+.note-card {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--mood-color),
+            rgba(255,255,255,0.08)
+        );
+
+    box-shadow:
+        0 10px 30px var(--mood-glow);
+}
+
+.note-card:hover {
+    border-color:
+        var(--mood-color);
+
+    box-shadow:
+        0 16px 40px var(--mood-glow);
+}
+
+.note-mood {
+    box-shadow:
+        0 0 20px var(--mood-glow),
+        inset 0 0 0 1px var(--mood-color);
 }
 
 .note-card:hover {
@@ -407,83 +875,126 @@
     margin: 18px 0 13px;
 }
 
-
-/* BUTTON */
+/* =========================
+   NOTE ACTION BUTTONS
+========================= */
 
 .note-actions {
     display: flex;
 
-    justify-content: flex-end;
+    align-items: center;
 
     gap: 8px;
+
+    margin-top: 14px;
 }
+
+
+/* BUTTON DASAR */
 
 .note-actions button {
-    border:
-        1px solid rgba(255,255,255,0.08);
 
-    background:
-        rgba(255,255,255,0.045);
+    display: inline-flex;
 
-    color:
-        rgba(255,255,255,0.72);
+    align-items: center;
 
-    padding: 7px 11px;
+    justify-content: center;
 
-    border-radius: 9px;
+    gap: 5px;
 
-    font-size: 12px;
+    padding: 8px 12px;
 
-    cursor: pointer;
+    border-radius: 10px;
 
-    transition: 0.2s ease;
-}
-
-.note-actions button:hover {
-    background:
-        rgba(255,255,255,0.10);
-
-    color: #fff;
-
-    transform: translateY(-1px);
-}
-
-
-/* DELETE */
-
-.note-actions .delete-btn {
-    color: #ff8b98;
-}
-
-.note-actions .delete-btn:hover {
-    background:
-        rgba(255,70,90,0.12);
-
-    color: #ff6978;
-}
-
-.read-more-btn {
-    margin-top: 10px;
-
-    padding: 0;
-
-    border: none;
-
-    background: none;
-
-    color: #9b7cff;
+    font-family: inherit;
 
     font-size: 12px;
+
     font-weight: 600;
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.read-more-btn:hover {
-    color: #b5a0ff;
-    transform: translateX(2px);
+
+/* ✏️ EDIT */
+
+.note-actions .edit-btn {
+
+    background:
+        rgba(155,124,255,0.10);
+
+    border:
+        1px solid rgba(155,124,255,0.18);
+
+    color:
+        #b9a8ff;
+}
+
+.note-actions .edit-btn:hover {
+
+    background:
+        rgba(155,124,255,0.20);
+
+    border-color:
+        rgba(155,124,255,0.35);
+
+    color: #d2c8ff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(155,124,255,0.15);
+}
+
+
+/* 🗑️ HAPUS */
+
+.note-actions .delete-btn {
+
+    background:
+        rgba(255,90,110,0.08);
+
+    border:
+        1px solid rgba(255,90,110,0.16);
+
+    color:
+        #ff929f;
+}
+
+.note-actions .delete-btn:hover {
+
+    background:
+        rgba(255,90,110,0.17);
+
+    border-color:
+        rgba(255,90,110,0.30);
+
+    color:
+        #ffabb5;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(255,90,110,0.12);
+}
+
+
+/* SAAT DITEKAN */
+
+.note-actions button:active {
+
+    transform:
+        scale(0.95);
 }
 
 /* =========================
@@ -740,16 +1251,242 @@
 }
 
 .edit-modal-box {
-    width: 90%;
-    max-width: 550px;
+    width: min(520px, 100%);
 
-    background: #171426;
-
-    border-radius: 18px;
-
-    padding: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
 
     box-sizing: border-box;
+
+    padding: 28px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(31,31,46,0.98),
+            rgba(17,17,27,0.99)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.5);
+
+    animation:
+        editModalIn 0.22s ease;
+}
+
+@keyframes editModalIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px)
+            scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* HEADER */
+
+.edit-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.edit-modal-header h2 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 21px;
+}
+
+
+/* CLOSE */
+
+.close-modal {
+    width: 36px;
+    height: 36px;
+
+    border: none;
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.close-modal:hover {
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #fff;
+
+    transform: rotate(5deg);
+}
+
+
+/* INPUT */
+
+.edit-modal-box input,
+.edit-modal-box textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    color: #fff;
+
+    padding: 13px 14px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+#editTitle {
+    margin-bottom: 13px;
+}
+
+#editContent {
+    min-height: 170px;
+
+    resize: vertical;
+
+    line-height: 1.65;
+}
+
+
+/* FOCUS */
+
+.edit-modal-box input:focus,
+.edit-modal-box textarea:focus {
+
+    background:
+        rgba(255,255,255,0.065);
+
+    border-color:
+        rgba(155,124,255,0.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(155,124,255,0.10);
+}
+
+
+/* BUTTON AREA */
+
+.edit-modal-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-top: 20px;
+}
+
+
+/* BATAL */
+
+.cancel-edit {
+    padding: 10px 16px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.cancel-edit:hover {
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #fff;
+}
+
+
+/* SIMPAN */
+
+.confirm-edit {
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9b7cff,
+            #6f5ce7
+        );
+
+    color: #fff;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 20px
+        rgba(120,90,240,0.25);
+
+    transition: 0.2s ease;
+}
+
+.confirm-edit:hover {
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(120,90,240,0.35);
 }
 
         .writer-box textarea {
@@ -886,23 +1623,6 @@
             font-size: 14px;
         }
 
-        <div class="note-actions">
-
-    <button
-        class="edit-btn"
-        onclick="editNote('${note.id}')"
-    >
-        ✏️ Edit
-    </button>
-
-    <button
-        class="delete-btn"
-        onclick="deleteNote('${note.id}')"
-    >
-        🗑️ Hapus
-    </button>
-
-</div>
 
         .empty {
             color: #777586;
@@ -1093,6 +1813,852 @@
     width: 100% !important;
     box-sizing: border-box !important;
     padding: 18px 20px !important;
+}
+
+/* =========================
+   EDIT MODAL - MODERN
+========================= */
+
+.edit-modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(5, 5, 12, 0.72);
+
+    backdrop-filter: blur(10px);
+
+    z-index: 9999;
+}
+
+
+/* BOX */
+
+.edit-modal-box {
+    width: min(520px, 100%);
+
+    box-sizing: border-box;
+
+    padding: 26px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(31,31,46,0.97),
+            rgba(17,17,27,0.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.09);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.5);
+
+    animation:
+        editModalIn 0.22s ease;
+}
+
+
+/* ANIMASI */
+
+@keyframes editModalIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px)
+            scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* HEADER */
+
+.edit-modal-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.edit-modal-header h2 {
+
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 21px;
+
+    font-weight: 650;
+}
+
+
+/* CLOSE */
+
+.close-modal {
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.close-modal:hover {
+
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #fff;
+
+    transform: rotate(5deg);
+}
+
+
+/* INPUT & TEXTAREA */
+
+.edit-modal-box input,
+.edit-modal-box textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 14px;
+
+    background:
+        rgba(255,255,255,0.045);
+
+    color: #fff;
+
+    padding: 13px 14px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* JUDUL */
+
+#editTitle {
+
+    margin-bottom: 13px;
+}
+
+
+/* ISI */
+
+#editContent {
+
+    min-height: 170px;
+
+    resize: vertical;
+
+    line-height: 1.65;
+}
+
+
+/* FOCUS */
+
+.edit-modal-box input:focus,
+.edit-modal-box textarea:focus {
+
+    background:
+        rgba(255,255,255,0.065);
+
+    border-color:
+        rgba(155,124,255,0.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(155,124,255,0.10);
+}
+
+
+/* BUTTON AREA */
+
+.edit-modal-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-top: 20px;
+}
+
+
+/* BATAL */
+
+.cancel-edit {
+
+    padding: 10px 16px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color:
+        rgba(255,255,255,0.65);
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.cancel-edit:hover {
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #fff;
+}
+
+
+/* SIMPAN */
+
+.confirm-edit {
+
+    padding: 10px 17px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9b7cff,
+            #6f5ce7
+        );
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 20px
+        rgba(120,90,240,0.25);
+
+    transition: 0.2s ease;
+}
+
+.confirm-edit:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(120,90,240,0.35);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edit-modal {
+        padding: 14px;
+    }
+
+    .edit-modal-box {
+        padding: 21px;
+
+        border-radius: 20px;
+    }
+
+    .edit-modal-actions {
+        flex-direction: column;
+    }
+
+    .cancel-edit,
+    .confirm-edit {
+        width: 100%;
+    }
+
+}
+
+.note-actions {
+    position: relative;
+    z-index: 100;
+}
+
+.note-actions button {
+    position: relative;
+    z-index: 101;
+    pointer-events: auto;
+}
+
+.edit-modal.show {
+    display: flex !important;
+
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    background: rgba(0, 0, 0, 0.75) !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 999999 !important;
+}
+
+.edit-modal-box {
+    position: relative !important;
+
+    z-index: 1000000 !important;
+
+    display: block !important;
+
+    width: min(520px, 90vw) !important;
+
+    background: #171426 !important;
+
+    border-radius: 24px !important;
+
+    padding: 28px !important;
+
+    box-sizing: border-box !important;
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.6) !important;
+}
+
+/* =========================
+   NOTE ACTION BUTTONS
+========================= */
+
+.note-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+
+/* SEMUA BUTTON */
+
+.note-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 8px 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid transparent;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* ✏️ EDIT */
+
+.edit-btn {
+    background:
+        rgba(155, 124, 255, 0.10);
+
+    color:
+        #b9a8ff;
+
+    border-color:
+        rgba(155, 124, 255, 0.16) !important;
+}
+
+.edit-btn:hover {
+    background:
+        rgba(155, 124, 255, 0.18);
+
+    border-color:
+        rgba(155, 124, 255, 0.30) !important;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 16px
+        rgba(155, 124, 255, 0.12);
+}
+
+
+/* 🗑️ HAPUS */
+
+.delete-btn {
+    background:
+        rgba(255, 90, 110, 0.08);
+
+    color:
+        #ff929f;
+
+    border-color:
+        rgba(255, 90, 110, 0.14) !important;
+}
+
+.delete-btn:hover {
+    background:
+        rgba(255, 90, 110, 0.16);
+
+    border-color:
+        rgba(255, 90, 110, 0.28) !important;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 16px
+        rgba(255, 90, 110, 0.10);
+}
+
+
+/* SAAT DITEKAN */
+
+.note-actions button:active {
+    transform:
+        scale(0.96);
+}
+
+/* =========================
+   BACA SELENGKAPNYA
+   KHUSUS
+========================= */
+
+.notes-grid .read-more-btn {
+    display: inline-block !important;
+
+    margin-top: 10px !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+
+    border-radius: 0 !important;
+
+    background: none !important;
+
+    color: #9b7cff !important;
+
+    font-family: inherit !important;
+
+    font-size: 12px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+
+    transform: none !important;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease !important;
+}
+
+
+.notes-grid .read-more-btn:hover {
+    background: none !important;
+
+    border: none !important;
+
+    color: #b5a0ff !important;
+
+    box-shadow: none !important;
+
+    transform: translateX(2px) !important;
+}
+
+/* =========================
+   DELETE MODAL
+========================= */
+
+.delete-modal {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.72);
+
+    backdrop-filter: blur(8px);
+
+    z-index: 999999;
+}
+
+.delete-modal.show {
+    display: flex !important;
+}
+
+.delete-modal-box {
+
+    width: min(420px, 90vw);
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    background:
+        #171426;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.55);
+
+    animation:
+        deleteModalIn 0.2s ease;
+}
+
+@keyframes deleteModalIn {
+
+    from {
+        opacity: 0;
+        transform: scale(0.94) translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.delete-icon {
+
+    width: 54px;
+    height: 54px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,90,110,0.10);
+
+    font-size: 24px;
+}
+
+.delete-modal-box h2 {
+
+    margin: 0;
+
+    color: white;
+
+    font-size: 21px;
+}
+
+.delete-modal-box p {
+
+    margin:
+        10px auto 24px;
+
+    max-width: 320px;
+
+    color:
+        #aaa8b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.delete-modal-actions {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.delete-modal-actions button {
+
+    flex: 1;
+
+    padding: 11px 14px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        0.2s ease;
+}
+
+.cancel-delete {
+
+    background:
+        rgba(255,255,255,0.06);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    color:
+        #bbb7c8;
+}
+
+.cancel-delete:hover {
+
+    background:
+        rgba(255,255,255,0.10);
+
+    color: white;
+}
+
+.confirm-delete {
+
+    background:
+        rgba(255,70,90,0.12);
+
+    border:
+        1px solid rgba(255,70,90,0.20);
+
+    color:
+        #ff8f9a;
+}
+
+.confirm-delete:hover {
+
+    background:
+        rgba(255,70,90,0.22);
+
+    border-color:
+        rgba(255,70,90,0.35);
+
+    color:
+        #ffb0b8;
+
+    transform:
+        translateY(-1px);
+}
+
+.delete-modal-actions button:active {
+
+    transform:
+        scale(0.96);
+}
+
+/* =========================
+   TOAST NOTIFICATION
+========================= */
+
+.toast {
+    position: fixed;
+
+    right: 24px;
+    bottom: 24px;
+
+    width: min(360px, calc(100vw - 40px));
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(23, 20, 38, 0.94);
+
+    border:
+        1px solid rgba(255,255,255,0.09);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,0,0,0.35);
+
+    opacity: 0;
+
+    transform:
+        translateY(20px)
+        scale(0.96);
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+
+    z-index: 9999999;
+}
+
+.toast.show {
+
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.toast-icon {
+
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background:
+        rgba(94,231,223,0.12);
+
+    color:
+        #5ee7df;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+.toast-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.toast-content strong {
+
+    color: white;
+
+    font-size: 13px;
+}
+
+.toast-content span {
+
+    color: #aaa8b8;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .toast {
+
+        right: 15px;
+        bottom: 15px;
+
+        width:
+            calc(100vw - 30px);
+    }
 }
 
     </style>
@@ -1421,6 +2987,8 @@
 </div>
 
 
+
+
     <footer>
         RuangPikiran © 2026
     </footer>
@@ -1431,6 +2999,7 @@ let selectedMood = "😊";
 let allNotes = [];
 let currentNotes = [];
 let editingNoteId = null;
+let deletingNoteId = null;
 
 // ==========================
 // PILIH MOOD
@@ -1510,7 +3079,88 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+function showToast(
+    message,
+    title = "Berhasil",
+    type = "success"
+) {
 
+    const toast =
+        document.getElementById("toast");
+
+    const toastTitle =
+        document.getElementById("toastTitle");
+
+    const toastMessage =
+        document.getElementById("toastMessage");
+
+    const toastIcon =
+        document.getElementById("toastIcon");
+
+
+    if (!toast) {
+        return;
+    }
+
+
+    // SET ISI
+    toastTitle.textContent =
+        title;
+
+    toastMessage.textContent =
+        message;
+
+
+    // RESET CLASS
+    toast.classList.remove(
+        "toast-success",
+        "toast-warning",
+        "toast-error"
+    );
+
+
+    // TAMBAHKAN TYPE
+    toast.classList.add(
+        "toast-" + type
+    );
+
+
+    // ICON
+    if (type === "success") {
+
+        toastIcon.textContent = "✓";
+
+    }
+
+    if (type === "warning") {
+
+        toastIcon.textContent = "!";
+
+    }
+
+    if (type === "error") {
+
+        toastIcon.textContent = "×";
+
+    }
+
+
+    // TAMPILKAN
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        window.toastTimeout
+    );
+
+
+    window.toastTimeout =
+        setTimeout(function() {
+
+            toast.classList.remove("show");
+
+        }, 3000);
+}
 
 
 
@@ -1553,9 +3203,11 @@ async function saveNote() {
 
     if (!title || !content) {
 
-        alert(
-            "Isi judul dan tulisan terlebih dahulu."
-        );
+       showToast(
+    "Isi judul dan tulisan terlebih dahulu.",
+    "Belum lengkap",
+    "warning"
+);
 
         return;
     }
@@ -1567,11 +3219,11 @@ async function saveNote() {
 
     if (result.error) {
 
-        alert(
-            "Gagal memeriksa akun: " +
-            result.error.message
-        );
-
+       showToast(
+    "Gagal memeriksa akun: " + result.error.message,
+    "Gagal",
+    "error"
+);
      
    return;
     }
@@ -1583,7 +3235,11 @@ async function saveNote() {
 
     if (!user) {
 
-        alert("Kamu belum login.");
+        showToast(
+    "Kamu belum login.",
+    "Belum login",
+    "warning"
+);
 
         window.location.href =
             "login.html";
@@ -1614,10 +3270,12 @@ async function saveNote() {
             insertResult.error
         );
 
-        alert(
-            "Gagal menyimpan: " +
-            insertResult.error.message
-        );
+        showToast(
+    "Gagal menyimpan: " +
+    insertResult.error.message,
+    "Gagal",
+    "error"
+);
 
         return;
     }
@@ -1631,9 +3289,9 @@ async function saveNote() {
         .value = "";
 
 
-    alert(
-        "Catatan berhasil disimpan!"
-    );
+    showToast(
+    "Catatan berhasil disimpan!"
+);
 
 
     loadNotes();
@@ -1656,10 +3314,12 @@ async function logout() {
             error
         );
 
-        alert(
-            "Logout gagal: " +
-            error.message
-        );
+        showToast(
+    "Logout gagal: " +
+    error.message,
+    "Gagal logout",
+    "error"
+);
 
         return;
     }
@@ -1761,16 +3421,18 @@ async function loadNotes() {
 function editNote(id) {
 
     const note =
-        allNotes.find(function(item) {
-
+        currentNotes.find(function(item) {
             return String(item.id) === String(id);
-
         });
 
 
     if (!note) {
 
-        alert("Catatan tidak ditemukan.");
+        showToast(
+    "Catatan tidak ditemukan.",
+    "Tidak ditemukan",
+    "warning"
+);
 
         return;
     }
@@ -1779,21 +3441,34 @@ function editNote(id) {
     editingNoteId = id;
 
 
-    document.getElementById(
-        "editTitle"
-    ).value =
+    const titleInput =
+        document.getElementById("editTitle");
+
+    const contentInput =
+        document.getElementById("editContent");
+
+    const modal =
+        document.getElementById("editModal");
+
+
+    if (!modal) {
+
+        console.error(
+    "ERROR: editModal tidak ditemukan!"
+);
+
+        return;
+    }
+
+
+    titleInput.value =
         note.title || "";
 
-
-    document.getElementById(
-        "editContent"
-    ).value =
+    contentInput.value =
         note.content || "";
 
 
-    document.getElementById(
-        "editModal"
-    ).classList.add("show");
+    modal.classList.add("show");
 }
 
 function closeEditModal() {
@@ -1826,10 +3501,11 @@ async function saveEditedNote() {
 
     if (!title || !content) {
 
-        alert(
-            "Judul dan isi tidak boleh kosong."
-        );
-
+       showToast(
+    "Judul dan isi tidak boleh kosong.",
+    "Belum lengkap",
+    "warning"
+);
         return;
     }
 
@@ -1855,10 +3531,12 @@ async function saveEditedNote() {
 
         console.error(error);
 
-        alert(
-            "Gagal mengedit: " +
-            error.message
-        );
+       showToast(
+    "Gagal mengedit: " +
+    error.message,
+    "Gagal",
+    "error"
+);
 
         return;
     }
@@ -1866,9 +3544,11 @@ async function saveEditedNote() {
 
     if (!data || data.length === 0) {
 
-        alert(
-            "Catatan tidak berhasil diperbarui."
-        );
+       showToast(
+    "Catatan tidak berhasil diperbarui.",
+    "Gagal",
+    "error"
+);
 
         return;
     }
@@ -1878,25 +3558,57 @@ async function saveEditedNote() {
 
     await loadNotes();
 
-    alert(
-        "Catatan berhasil diperbarui!"
-    );
+    showToast(
+    "Catatan berhasil diperbarui!"
+);
 }
 
 // ==========================
 // HAPUS CATATAN
 // ==========================
 
-async function deleteNote(id) {
+function deleteNote(id) {
 
-    console.log("ID UNTUK HAPUS:", id);
+    deletingNoteId = id;
 
-    const yakin =
-        confirm("Yakin ingin menghapus catatan ini?");
+    const modal =
+        document.getElementById("deleteModal");
 
-    if (!yakin) {
+    if (!modal) {
+
+        console.error(
+    "Modal hapus tidak ditemukan."
+);
+
         return;
     }
+
+    modal.classList.add("show");
+}
+
+function closeDeleteModal() {
+
+    const modal =
+        document.getElementById("deleteModal");
+
+    if (modal) {
+
+        modal.classList.remove("show");
+
+    }
+
+    deletingNoteId = null;
+}
+
+async function confirmDeleteNote() {
+
+    if (!deletingNoteId) {
+        return;
+    }
+
+
+    const id =
+        deletingNoteId;
 
 
     const { data, error } =
@@ -1907,18 +3619,16 @@ async function deleteNote(id) {
             .select();
 
 
-    console.log("HASIL DELETE:", data);
-    console.log("ERROR DELETE:", error);
-
-
     if (error) {
 
         console.error(error);
 
-        alert(
-            "Gagal menghapus: " +
-            error.message
-        );
+       showToast(
+    "Gagal menghapus: " +
+    error.message,
+    "Gagal",
+    "error"
+);
 
         return;
     }
@@ -1926,17 +3636,17 @@ async function deleteNote(id) {
 
     if (!data || data.length === 0) {
 
-        alert(
-            "Tidak ada data yang terhapus. Kemungkinan policy DELETE Supabase belum benar."
-        );
+       showToast(
+    "Tidak ada data yang terhapus.",
+    "Gagal",
+    "error"
+);
 
         return;
     }
 
 
-    alert(
-        "Catatan benar-benar terhapus dari database."
-    );
+    closeDeleteModal();
 
 
     await loadNotes();
@@ -1987,8 +3697,9 @@ function renderNotes(notes) {
             document.createElement("div");
 
 
-        card.className =
-            "note-card";
+       card.className =
+    "note-card mood-" +
+    (note.mood || "😊");
 console.log("CATATAN:", note);
 console.log("ID CATATAN:", note.id);
 
@@ -2042,12 +3753,13 @@ console.log("ID CATATAN:", note.id);
 
     <div class="note-actions">
 
-        <button
-            class="edit-btn"
-            onclick="editNote('${note.id}')"
-        >
-            ✏️ Edit
-        </button>
+      <button
+    type="button"
+    class="edit-btn"
+    onclick="editNote('${note.id}')"
+>
+    ✏️ Edit
+</button>
 
         <button
             class="delete-btn"
@@ -2406,7 +4118,74 @@ function filterNotes() {
 
 loadNotes();
 
+
 </script>
+
+<!-- =========================
+     MODAL KONFIRMASI HAPUS
+========================= -->
+
+<div class="delete-modal" id="deleteModal">
+
+    <div class="delete-modal-box">
+
+        <div class="delete-icon">
+            🗑️
+        </div>
+
+        <h2>
+            Hapus catatan?
+        </h2>
+
+        <p>
+            Catatan ini akan dihapus secara permanen.
+            Tindakan ini tidak dapat dibatalkan.
+        </p>
+
+        <div class="delete-modal-actions">
+
+            <button
+                type="button"
+                class="cancel-delete"
+                onclick="closeDeleteModal()"
+            >
+                Batal
+            </button>
+
+            <button
+                type="button"
+                class="confirm-delete"
+                onclick="confirmDeleteNote()"
+            >
+                🗑️ Hapus
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TOAST NOTIFICATION -->
+
+<div
+    class="toast"
+    id="toast"
+>
+    <div class="toast-icon" id="toastIcon">
+        ✓
+    </div>
+
+    <div class="toast-content">
+        <strong id="toastTitle">
+            Berhasil
+        </strong>
+
+        <span id="toastMessage">
+            Catatan berhasil disimpan.
+        </span>
+    </div>
+</div>
 
 </body>
 </html>
