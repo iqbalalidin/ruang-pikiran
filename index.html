@@ -1275,19 +1275,20 @@ async function loadNotes() {
         await supabaseClient.auth.getUser();
 
 
-    if (result.error) {
+   if (
+    result.error.name ===
+    "AuthSessionMissingError"
+) {
 
-        if (
-            result.error.name ===
-            "AuthSessionMissingError"
-        ) {
+    console.log(
+        "Tidak ada session login. Mengarahkan ke login."
+    );
 
-            console.log(
-                "Tidak ada session login."
-            );
+    window.location.href =
+        "login.html";
 
-            return;
-        }
+    return;
+}
 
 
         console.error(
@@ -1303,14 +1304,17 @@ async function loadNotes() {
         result.data.user;
 
 
-    if (!user) {
+ if (!user) {
 
-        console.log(
-            "User belum login."
-        );
+    console.log(
+        "User belum login. Mengarahkan ke halaman login."
+    );
 
-        return;
-    }
+    window.location.href =
+        "login.html";
+
+    return;
+}
 
 
     const notesResult =
