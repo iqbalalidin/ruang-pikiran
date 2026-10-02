@@ -3148,6 +3148,68 @@
     }
 }
 
+.conversation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.conversation-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.035);
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.2s ease;
+}
+
+.conversation-item:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-1px);
+}
+
+.conversation-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+        135deg,
+        #9b7cff,
+        #5ee7df
+    );
+    color: white;
+    font-weight: 700;
+}
+
+.conversation-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.conversation-info strong {
+    font-size: 13px;
+}
+
+.conversation-info span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
     </style>
 </head>
 
@@ -3582,6 +3644,13 @@
 
 </div>
 
+<div class="conversation-list" id="conversationList">
+
+    <div class="chat-empty">
+        Belum ada percakapan.
+    </div>
+
+</div>
 
         <!-- SEARCH USER -->
 
@@ -3813,6 +3882,7 @@ function openChat() {
         .getElementById("chatOverlay")
         .classList.add("show");
 
+        loadConversations();
 }
 
 
@@ -3844,6 +3914,7 @@ let activeChatUserId = null;
 
 let activeChatUsername = null;
 
+let activeConversationId = null;
 
 async function searchUsers() {
 
@@ -4019,174 +4090,238 @@ async function searchUsers() {
 
 }
 
+async function loadConversations() {
 
-// ==========================
-// BUKA CHAT USER
-// ==========================
-
-function startChat(
-    userId,
-    username
-) {
-
-    activeChatUserId =
-        userId;
-
-    activeChatUsername =
-        username;
-
-
-    document
-        .getElementById("userSearch")
-        .value = "";
-
-
-    document
-        .getElementById("userResults")
-        .style.display = "none";
-
-
-    document
-        .querySelector(".chat-search")
-        .style.display = "none";
-
-
-    document
-        .querySelector(".chat-header")
-        .style.display = "none";
-
-
-    document
-        .getElementById("conversationView")
-        .classList.add("show");
-
-
-    document
-        .getElementById(
-            "conversationUsername"
-        )
-        .textContent =
-        "@" + username;
-
-
-    document
-        .getElementById(
-            "messageInput"
-        )
-        .focus();
-
-}
-
-
-// ==========================
-// KEMBALI KE PENCARIAN USER
-// ==========================
-
-function backToUserSearch() {
-
-    const conversation =
+    const container =
         document.getElementById(
-            "conversationView"
+            "conversationList"
         );
 
-
-    if (conversation) {
-
-        conversation
-            .classList.remove("show");
-
+    if (!container) {
+        return;
     }
 
+    const {
+        data: userData,
+        error: userError
+    } =
+        await supabaseClient.auth.getUser();
 
-    const results =
-        document.getElementById(
-            "userResults"
-        );
-
-
-    if (results) {
-
-        results.style.display =
-            "flex";
-
+    if (
+        userError ||
+        !userData.user
+    ) {
+        return;
     }
 
+    const currentUserId =
+        userData.user.id;
 
-    const searchBox =
-        document.querySelector(
-            ".chat-search"
+
+    const {
+        data: memberships,
+        error: membershipError
+    } =
+        await supabaseClient
+            .from("conversation_members")
+            .select("conversation_id")
+            .eq(
+                "user_id",
+                currentUserId
+            );
+
+
+    if (membershipError) {
+
+        console.error(
+            "Gagal mengambil percakapan:",
+            membershipError
         );
-
-
-    if (searchBox) {
-
-        searchBox.style.display =
-            "flex";
-
-    }
-
-
-    const header =
-        document.querySelector(
-            ".chat-header"
-        );
-
-
-    if (header) {
-
-        header.style.display =
-            "flex";
-
-    }
-
-
-    activeChatUserId =
-        null;
-
-    activeChatUsername =
-        null;
-
-}
-
-
-// ==========================
-// KIRIM PESAN SEMENTARA
-// ==========================
-
-function sendMessage() {
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        );
-
-
-    const message =
-        input.value.trim();
-
-
-    if (!message) {
 
         return;
-
     }
 
 
-    console.log(
-        "Pesan:",
-        message
-    );
+    container.innerHTML = "";
 
 
-    console.log(
-        "Tujuan:",
-        activeChatUsername
-    );
+    if (
+        !memberships ||
+        memberships.length === 0
+    ) {
+
+        container.innerHTML = `
+            <div class="chat-empty">
+                Belum ada percakapan.
+            </div>
+        `;
+
+        return;
+    }
 
 
-    input.value = "";
+    for (
+        const item of memberships
+    ) {
+
+        const conversationId =
+            item.conversation_id;
+
+
+        const {
+            data: members,
+            error: memberError
+        } =
+            await supabaseClient
+                .from("conversation_members")
+                .select("user_id")
+                .eq(
+                    "conversation_id",
+                    conversationId
+                );
+
+
+        if (memberError) {
+            continue;
+        }
+
+
+        const otherMember =
+            (members || []).find(
+                function(member) {
+
+                    return (
+                        String(
+                            member.user_id
+                        ) !==
+                        String(
+                            currentUserId
+                        )
+                    );
+
+                }
+            );
+
+
+        if (!otherMember) {
+            continue;
+        }
+
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "id, username, avatar"
+                )
+                .eq(
+                    "id",
+                    otherMember.user_id
+                )
+                .single();
+
+
+        if (
+            profileError ||
+            !profile
+        ) {
+            continue;
+        }
+
+
+        const {
+            data: lastMessages
+        } =
+            await supabaseClient
+                .from("messages")
+                .select(
+                    "content, created_at"
+                )
+                .eq(
+                    "conversation_id",
+                    conversationId
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(1);
+
+
+        const lastMessage =
+            lastMessages &&
+            lastMessages.length > 0
+                ? lastMessages[0]
+                : null;
+
+
+        const itemElement =
+            document.createElement(
+                "button"
+            );
+
+
+        itemElement.className =
+            "conversation-item";
+
+
+        itemElement.onclick =
+            function() {
+
+                startChat(
+                    profile.id,
+                    profile.username
+                );
+
+            };
+
+
+        const initial =
+            profile.username
+                ? profile.username
+                    .charAt(0)
+                    .toUpperCase()
+                : "?";
+
+
+        itemElement.innerHTML = `
+
+            <div class="conversation-avatar">
+                ${initial}
+            </div>
+
+            <div class="conversation-info">
+
+                <strong>
+                    ${profile.username}
+                </strong>
+
+                <span>
+                    ${
+                        lastMessage
+                            ? lastMessage.content
+                            : "Belum ada pesan"
+                    }
+                </span>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(
+            itemElement
+        );
+
+    }
 
 }
+
 
 
 // ==========================
@@ -4217,6 +4352,8 @@ function startChat(
 
     activeChatUsername = username;
 
+    activeConversationId = null;
+
 
     document
         .getElementById("userSearch")
@@ -4253,11 +4390,13 @@ function startChat(
         "@" + username;
 
 
-    document
+     document
         .getElementById(
             "messageInput"
         )
         .focus();
+
+        loadMessages();
 
 
     console.log(
@@ -4265,12 +4404,14 @@ function startChat(
         userId,
         username
     );
-}
+
+
     console.log(
         "Membuka chat dengan:",
         userId,
         username
     );
+
 
     showToast(
         "Chat dengan @" + username + " siap dibuat.",
@@ -4278,10 +4419,16 @@ function startChat(
         "success"
     );
 
+}
 
-function backToUserSearch() {
 
- async function sendMessage() {
+// ==========================
+// SEND MESSAGE
+// ==========================
+
+async function sendMessage() {
+
+    console.log("SEND MESSAGE DIPANGGIL");
 
     const input =
         document.getElementById(
@@ -4338,96 +4485,48 @@ function backToUserSearch() {
     const currentUserId =
         userData.user.id;
 
-
-    // ==========================
-    // CARI CONVERSATION
-    // ==========================
-
-    const {
-        data: myConversations,
-        error: conversationError
-    } =
-        await supabaseClient
-            .from("conversation_members")
-            .select(
-                "conversation_id"
-            )
-            .eq(
-                "user_id",
-                currentUserId
-            );
+        let conversationId = null;
 
 
-    if (conversationError) {
+// ==========================
+// CARI PRIVATE CONVERSATION
+// ==========================
 
-        console.error(
-            conversationError
+const {
+    data: existingConversation,
+    error: findConversationError
+} =
+    await supabaseClient
+        .rpc(
+            "find_private_conversation",
+            {
+                target_user_id:
+                    activeChatUserId
+            }
         );
 
-        showToast(
-            "Gagal memeriksa percakapan.",
-            "Chat",
-            "error"
-        );
 
-        return;
-    }
+if (findConversationError) {
 
+    console.error(
+        "Gagal mencari conversation:",
+        findConversationError
+    );
 
-    let conversationId = null;
+    showToast(
+        "Gagal mencari percakapan.",
+        "Chat",
+        "error"
+    );
 
-
-    // ==========================
-    // CARI CONVERSATION
-    // YANG BERISI USER TUJUAN
-    // ==========================
-
-    for (
-        const conversation
-        of myConversations || []
-    ) {
-
-        const {
-            data: members,
-            error: memberError
-        } =
-            await supabaseClient
-                .from("conversation_members")
-                .select("user_id")
-                .eq(
-                    "conversation_id",
-                    conversation.conversation_id
-                );
+    return;
+}
 
 
-        if (memberError) {
-            continue;
-        }
-
-
-        const hasTargetUser =
-            members.some(
-                function(member) {
-
-                    return (
-                        member.user_id ===
-                        activeChatUserId
-                    );
-
-                }
-            );
-
-
-        if (hasTargetUser) {
-
-            conversationId =
-                conversation.conversation_id;
-
-            break;
-        }
-
-    }
-
+conversationId =
+    existingConversation;
+console.log("TARGET USER:", activeChatUserId);
+console.log("CONVERSATION ID:", conversationId);
 
     // ==========================
     // BUAT CONVERSATION BARU
@@ -4435,16 +4534,17 @@ function backToUserSearch() {
 
     if (!conversationId) {
 
-        const {
-            data: newConversation,
-            error: createError
-        } =
-            await supabaseClient
-                .from("conversations")
-                .insert({})
-                .select()
-                .single();
-
+                const {
+    data: newConversation,
+    error: createError
+} =
+    await supabaseClient
+        .from("conversations")
+        .insert({
+            created_by: currentUserId
+        })
+        .select()
+        .single();
 
         if (createError) {
 
@@ -4557,13 +4657,22 @@ function backToUserSearch() {
 
 
     // ==========================
-    // TAMPILKAN PESAN
-    // ==========================
+// TAMPILKAN PESAN
+// ==========================
+
+if (
+    activeConversationId ===
+    conversationId
+) {
 
     addMessageToChat(
         newMessage,
         currentUserId
     );
+
+}
+
+loadConversations();
 
 
     input.value = "";
@@ -4572,17 +4681,88 @@ function backToUserSearch() {
 
 }
 
+// ==========================
+// TAMPILKAN SATU PESAN
+// ==========================
+
 function addMessageToChat(
     message,
     currentUserId
 ) {
 
-    async function loadMessages() {
+    const container =
+        document.getElementById(
+            "messagesContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const empty =
+        container.querySelector(
+            ".chat-empty"
+        );
+
+
+    if (empty) {
+        empty.remove();
+    }
+
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+
+    bubble.className =
+        "chat-message " +
+        (
+            String(message.sender_id) ===
+            String(currentUserId)
+                ? "mine"
+                : "theirs"
+        );
+
+
+    bubble.textContent =
+        message.content;
+
+
+    container.appendChild(
+        bubble
+    );
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+// ==========================
+// LOAD MESSAGES
+// ==========================
+
+async function loadMessages() {
+
+    const targetUserId =
+    activeChatUserId;
+
+    console.log(
+    "LOAD MESSAGES DIPANGGIL",
+    activeChatUserId,
+    activeChatUsername
+);
 
     const container =
         document.getElementById(
             "messagesContainer"
         );
+
 
     if (!container) {
         return;
@@ -4608,92 +4788,74 @@ function addMessageToChat(
         return;
     }
 
-
     const currentUserId =
-        userData.user.id;
+    userData.user.id;
 
 
-    // Cari conversation milik user
-    const {
-        data: myConversations,
-        error: conversationError
-    } =
-        await supabaseClient
-            .from("conversation_members")
-            .select("conversation_id")
-            .eq(
-                "user_id",
-                currentUserId
-            );
+   // ==========================
+// CARI PRIVATE CONVERSATION
+// ==========================
 
-
-    if (conversationError) {
-
-        console.error(
-            conversationError
+const {
+    data: conversationId,
+    error: findConversationError
+} =
+    await supabaseClient
+        .rpc(
+            "find_private_conversation",
+            {
+                target_user_id:
+    targetUserId
+            }
         );
 
-        return;
-    }
+
+console.log(
+    "LOAD CHAT USER:",
+    activeChatUserId,
+    activeChatUsername
+);
+
+console.log(
+    "LOAD CONVERSATION ID:",
+    conversationId
+);
+
+if (
+    targetUserId !==
+    activeChatUserId
+) {
+    return;
+}
+
+activeConversationId =
+    conversationId;
 
 
-    let conversationId = null;
+if (findConversationError) {
+
+    console.error(
+        "Gagal mencari conversation:",
+        findConversationError
+    );
+
+    container.innerHTML = `
+        <div class="chat-empty">
+            Gagal memuat percakapan.
+        </div>
+    `;
+
+    return;
+}
 
 
-    // Cari conversation yang juga
-    // memiliki user tujuan
-    for (
-        const conversation
-        of myConversations || []
-    ) {
-
-        const {
-            data: members,
-            error: memberError
-        } =
-            await supabaseClient
-                .from("conversation_members")
-                .select("user_id")
-                .eq(
-                    "conversation_id",
-                    conversation.conversation_id
-                );
+container.innerHTML = "";
 
 
-        if (memberError) {
-            continue;
-        }
+    // ==========================
+    // BELUM ADA CONVERSATION
+    // ==========================
 
-
-        const hasTargetUser =
-            members.some(
-                function(member) {
-
-                    return (
-                        member.user_id ===
-                        activeChatUserId
-                    );
-
-                }
-            );
-
-
-        if (hasTargetUser) {
-
-            conversationId =
-                conversation.conversation_id;
-
-            break;
-
-        }
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    // Belum ada percakapan
     if (!conversationId) {
 
         container.innerHTML = `
@@ -4706,7 +4868,17 @@ function addMessageToChat(
     }
 
 
-    // Ambil pesan
+    // ==========================
+    // AMBIL PESAN
+    // ==========================
+
+    if (
+    activeConversationId !==
+    conversationId
+) {
+    return;
+}
+
     const {
         data: messages,
         error: messageError
@@ -4775,58 +4947,10 @@ function addMessageToChat(
 
 }
 
-    const container =
-        document.getElementById(
-            "messagesContainer"
-        );
 
-
-    if (!container) {
-        return;
-    }
-
-
-    const empty =
-        container.querySelector(
-            ".chat-empty"
-        );
-
-
-    if (empty) {
-        empty.remove();
-    }
-
-
-    const bubble =
-        document.createElement(
-            "div"
-        );
-
-
-    bubble.className =
-        "chat-message " +
-        (
-            message.sender_id ===
-            currentUserId
-                ? "mine"
-                : "theirs"
-        );
-
-
-    bubble.textContent =
-        message.content;
-
-
-    container.appendChild(
-        bubble
-    );
-
-
-    container.scrollTop =
-        container.scrollHeight;
-
-}
-
+// ==========================
+// ENTER = KIRIM PESAN
+// ==========================
 
 function handleMessageKey(event) {
 
@@ -4839,36 +4963,79 @@ function handleMessageKey(event) {
         sendMessage();
 
     }
+
 }
 
-    document
-        .getElementById(
+
+// ==========================
+// KEMBALI KE PENCARIAN USER
+// ==========================
+
+function backToUserSearch() {
+
+    const conversationView =
+        document.getElementById(
             "conversationView"
-        )
-        .classList.remove("show");
+        );
 
 
-    document
-        .getElementById(
+    const userResults =
+        document.getElementById(
             "userResults"
-        )
-        .style.display = "flex";
+        );
 
 
-    document
-        .querySelector(".chat-search")
-        .style.display = "flex";
+    const chatSearch =
+        document.querySelector(
+            ".chat-search"
+        );
 
 
-    document
-        .querySelector(".chat-header")
-        .style.display = "flex";
+    const chatHeader =
+        document.querySelector(
+            ".chat-header"
+        );
+
+
+    if (conversationView) {
+
+        conversationView
+            .classList
+            .remove("show");
+
+    }
+
+
+    if (userResults) {
+
+        userResults.style.display =
+            "flex";
+
+    }
+
+
+    if (chatSearch) {
+
+        chatSearch.style.display =
+            "flex";
+
+    }
+
+
+    if (chatHeader) {
+
+        chatHeader.style.display =
+            "flex";
+
+    }
 
 
     activeChatUserId = null;
 
     activeChatUsername = null;
+
 }
+
 
 // ==========================
 // SIMPAN CATATAN
