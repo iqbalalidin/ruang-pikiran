@@ -193,15 +193,13 @@
     transform: translateY(-1px);
 }
 
-/* =========================
-   CONVERSATION
-========================= */
+/* ==========================
+   ROOM CHAT
+========================== */
 
 .conversation-view {
     display: none;
-
     flex-direction: column;
-
     height: 520px;
 }
 
@@ -210,16 +208,16 @@
 }
 
 
-/* HEADER */
+/* ==========================
+   HEADER
+========================== */
 
 .conversation-header {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 
-    padding-bottom: 15px;
+    padding: 10px 0 15px;
 
     border-bottom:
         1px solid
@@ -228,15 +226,20 @@
 
 .conversation-header div {
     display: flex;
-
     flex-direction: column;
-
     gap: 3px;
+
+    min-width: 0;
+}
+
+.conversation-header strong {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .conversation-header span {
     color: #777586;
-
     font-size: 11px;
 }
 
@@ -244,8 +247,9 @@
     width: 35px;
     height: 35px;
 
-    border: none;
+    flex-shrink: 0;
 
+    border: none;
     border-radius: 10px;
 
     background:
@@ -256,35 +260,64 @@
     cursor: pointer;
 
     font-size: 18px;
+
+    transition: 0.2s ease;
 }
 
 .back-chat:hover {
     background:
-        rgba(255,255,255,0.11);
+        rgba(155,124,255,0.14);
+
+    transform: translateX(-1px);
 }
 
 
-/* MESSAGES */
+/* ==========================
+   MESSAGES
+========================== */
 
 .messages-container {
     flex: 1;
 
     overflow-y: auto;
 
-    padding: 18px 4px;
+    padding: 18px 3px;
 
     display: flex;
-
     flex-direction: column;
 
-    gap: 8px;
+    gap: 7px;
+
+    scroll-behavior: smooth;
 }
 
 
-/* MESSAGE */
+/* scrollbar */
+
+.messages-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background:
+        rgba(255,255,255,0.10);
+
+    border-radius: 10px;
+}
+
+
+/* ==========================
+   MESSAGE BUBBLE
+========================== */
 
 .chat-message {
-    max-width: 75%;
+    position: relative;
+
+    max-width: 72%;
 
     padding: 10px 13px;
 
@@ -295,7 +328,29 @@
     line-height: 1.5;
 
     word-break: break-word;
+
+    animation:
+        messageAppear
+        0.18s
+        ease;
 }
+
+.message-time {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 9px;
+
+    line-height: 1;
+
+    opacity: 0.55;
+
+    text-align: right;
+}
+
+
+/* pesan sendiri */
 
 .chat-message.mine {
     align-self: flex-end;
@@ -310,24 +365,56 @@
     color: white;
 
     border-bottom-right-radius: 5px;
+
+    box-shadow:
+        0 4px 14px
+        rgba(100,80,220,0.15);
 }
+
+
+/* pesan lawan */
 
 .chat-message.theirs {
     align-self: flex-start;
 
     background:
-        rgba(255,255,255,0.07);
+        rgba(255,255,255,0.065);
 
     color: #ddd;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.045);
 
     border-bottom-left-radius: 5px;
 }
 
 
-/* INPUT */
+/* animasi pesan */
+
+@keyframes messageAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* ==========================
+   INPUT AREA
+========================== */
 
 .message-input-area {
     display: flex;
+
+    align-items: center;
 
     gap: 8px;
 
@@ -343,34 +430,70 @@
 
     min-width: 0;
 
+    height: 42px;
+
+    box-sizing: border-box;
+
     border: 1px solid
         rgba(255,255,255,0.08);
 
     background:
-        rgba(255,255,255,0.05);
+        rgba(255,255,255,0.045);
 
     color: white;
 
     outline: none;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
     padding: 11px 13px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        0.2s ease;
+}
+
+.message-input-area input::placeholder {
+    color:
+        rgba(255,255,255,0.35);
 }
 
 .message-input-area input:focus {
+    background:
+        rgba(255,255,255,0.06);
+
     border-color:
-        rgba(155,124,255,0.4);
+        rgba(155,124,255,0.45);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(155,124,255,0.08);
 }
+
+
+/* ==========================
+   SEND BUTTON
+========================== */
 
 .send-message-btn {
     width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
 
     border: none;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
-    background: #9b7cff;
+    background:
+        linear-gradient(
+            135deg,
+            #9b7cff,
+            #8064e8
+        );
 
     color: white;
 
@@ -378,13 +501,27 @@
 
     font-size: 16px;
 
-    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .send-message-btn:hover {
-    transform: translateY(-1px);
+    transform:
+        translateY(-1px);
 
-    background: #a88cff;
+    box-shadow:
+        0 7px 18px
+        rgba(120,90,240,0.25);
+}
+
+.send-message-btn:active {
+    transform:
+        translateY(0);
 }
 
 /* OVERLAY */
@@ -3210,6 +3347,88 @@
     text-overflow: ellipsis;
 }
 
+/* ==========================
+   CHAT LOADING SKELETON
+========================== */
+
+.chat-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.chat-skeleton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.025);
+    border-radius: 12px;
+}
+
+.skeleton-avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.05) 25%,
+            rgba(255,255,255,0.10) 50%,
+            rgba(255,255,255,0.05) 75%
+        );
+
+    background-size: 200% 100%;
+    animation: chatShimmer 1.4s infinite;
+}
+
+.skeleton-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.skeleton-name,
+.skeleton-message {
+    height: 10px;
+    border-radius: 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.05) 25%,
+            rgba(255,255,255,0.10) 50%,
+            rgba(255,255,255,0.05) 75%
+        );
+
+    background-size: 200% 100%;
+    animation: chatShimmer 1.4s infinite;
+}
+
+.skeleton-name {
+    width: 35%;
+}
+
+.skeleton-message {
+    width: 65%;
+}
+
+@keyframes chatShimmer {
+
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+
+}
+
     </style>
 </head>
 
@@ -3644,13 +3863,6 @@
 
 </div>
 
-<div class="conversation-list" id="conversationList">
-
-    <div class="chat-empty">
-        Belum ada percakapan.
-    </div>
-
-</div>
 
         <!-- SEARCH USER -->
 
@@ -3667,23 +3879,20 @@
 
         </div>
 
+<!-- DAFTAR CHAT -->
 
-        <!-- USER RESULTS -->
+<div
+    class="conversation-list"
+    id="conversationList"
+></div>
 
-        <div
-            class="user-results"
-            id="userResults"
-        >
 
-            <div class="chat-empty">
-                Cari username untuk memulai chat.
-            </div>
+<!-- USER RESULTS -->
 
-        </div>
-
-    </div>
-
-</div>
+<div
+    class="user-results"
+    id="userResults"
+></div>
 
 <script>
 
@@ -3882,15 +4091,55 @@ function openChat() {
         .getElementById("chatOverlay")
         .classList.add("show");
 
-        loadConversations();
-}
+    showChatLoading();
 
+    loadConversations();
+
+}
 
 function closeChat() {
 
+    // Tutup room / overlay chat
     document
         .getElementById("chatOverlay")
         .classList.remove("show");
+
+
+    // Tampilkan kembali search username
+    const chatSearch =
+        document.querySelector(".chat-search");
+
+    if (chatSearch) {
+        chatSearch.style.display = "";
+    }
+
+
+    // Tampilkan kembali daftar chat
+    const conversationList =
+        document.getElementById(
+            "conversationList"
+        );
+
+    if (conversationList) {
+        conversationList.style.display = "";
+    }
+
+
+    // Sembunyikan hasil pencarian
+    const userResults =
+        document.getElementById(
+            "userResults"
+        );
+
+    if (userResults) {
+        userResults.style.display = "none";
+    }
+
+
+    // Bersihkan chat aktif
+    activeChatUserId = null;
+    activeChatUsername = null;
+    activeConversationId = null;
 
 }
 
@@ -4090,7 +4339,7 @@ async function searchUsers() {
 
 }
 
-async function loadConversations() {
+function showChatLoading() {
 
     const container =
         document.getElementById(
@@ -4101,11 +4350,67 @@ async function loadConversations() {
         return;
     }
 
+    container.innerHTML = `
+
+        <div class="chat-loading">
+
+            <div class="chat-skeleton">
+                <div class="skeleton-avatar"></div>
+
+                <div class="skeleton-info">
+                    <div class="skeleton-name"></div>
+                    <div class="skeleton-message"></div>
+                </div>
+            </div>
+
+
+            <div class="chat-skeleton">
+                <div class="skeleton-avatar"></div>
+
+                <div class="skeleton-info">
+                    <div class="skeleton-name"></div>
+                    <div class="skeleton-message"></div>
+                </div>
+            </div>
+
+
+            <div class="chat-skeleton">
+                <div class="skeleton-avatar"></div>
+
+                <div class="skeleton-info">
+                    <div class="skeleton-name"></div>
+                    <div class="skeleton-message"></div>
+                </div>
+            </div>
+
+        </div>
+
+    `;
+}
+
+// ==========================
+// LOAD DAFTAR CHAT - OPTIMIZED
+// ==========================
+async function loadConversations() {
+
+    const container =
+        document.getElementById("conversationList");
+
+    if (!container) {
+        return;
+    }
+
+
+    // ==========================
+    // USER YANG LOGIN
+    // ==========================
+
     const {
         data: userData,
         error: userError
     } =
         await supabaseClient.auth.getUser();
+
 
     if (
         userError ||
@@ -4114,9 +4419,14 @@ async function loadConversations() {
         return;
     }
 
+
     const currentUserId =
         userData.user.id;
 
+
+    // ==========================
+    // AMBIL CONVERSATION USER
+    // ==========================
 
     const {
         data: memberships,
@@ -4134,7 +4444,7 @@ async function loadConversations() {
     if (membershipError) {
 
         console.error(
-            "Gagal mengambil percakapan:",
+            "Gagal mengambil daftar chat:",
             membershipError
         );
 
@@ -4160,188 +4470,493 @@ async function loadConversations() {
     }
 
 
-    for (
-        const item of memberships
-    ) {
+    // ==========================
+    // AMBIL ID CONVERSATION
+    // ==========================
 
-        const conversationId =
-            item.conversation_id;
-
-
-        const {
-            data: members,
-            error: memberError
-        } =
-            await supabaseClient
-                .from("conversation_members")
-                .select("user_id")
-                .eq(
-                    "conversation_id",
-                    conversationId
-                );
-
-
-        if (memberError) {
-            continue;
-        }
-
-
-        const otherMember =
-            (members || []).find(
-                function(member) {
-
-                    return (
-                        String(
-                            member.user_id
-                        ) !==
-                        String(
-                            currentUserId
-                        )
-                    );
-
-                }
-            );
-
-
-        if (!otherMember) {
-            continue;
-        }
-
-
-        const {
-            data: profile,
-            error: profileError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select(
-                    "id, username, avatar"
-                )
-                .eq(
-                    "id",
-                    otherMember.user_id
-                )
-                .single();
-
-
-        if (
-            profileError ||
-            !profile
-        ) {
-            continue;
-        }
-
-
-        const {
-            data: lastMessages
-        } =
-            await supabaseClient
-                .from("messages")
-                .select(
-                    "content, created_at"
-                )
-                .eq(
-                    "conversation_id",
-                    conversationId
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(1);
-
-
-        const lastMessage =
-            lastMessages &&
-            lastMessages.length > 0
-                ? lastMessages[0]
-                : null;
-
-
-        const itemElement =
-            document.createElement(
-                "button"
-            );
-
-
-        itemElement.className =
-            "conversation-item";
-
-
-        itemElement.onclick =
-            function() {
-
-                startChat(
-                    profile.id,
-                    profile.username
-                );
-
-            };
-
-
-        const initial =
-            profile.username
-                ? profile.username
-                    .charAt(0)
-                    .toUpperCase()
-                : "?";
-
-
-        itemElement.innerHTML = `
-
-            <div class="conversation-avatar">
-                ${initial}
-            </div>
-
-            <div class="conversation-info">
-
-                <strong>
-                    ${profile.username}
-                </strong>
-
-                <span>
-                    ${
-                        lastMessage
-                            ? lastMessage.content
-                            : "Belum ada pesan"
-                    }
-                </span>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(
-            itemElement
+    const conversationIds =
+        memberships.map(
+            function(item) {
+                return item.conversation_id;
+            }
         );
 
+
+    // ==========================
+    // AMBIL MEMBER + PESAN
+    // SECARA BERSAMAAN
+    // ==========================
+
+    const [
+        membersResult,
+        messagesResult
+    ] = await Promise.all([
+
+        supabaseClient
+            .from("conversation_members")
+            .select(
+                "conversation_id, user_id"
+            )
+            .in(
+                "conversation_id",
+                conversationIds
+            ),
+
+        supabaseClient
+            .from("messages")
+            .select(
+                "conversation_id, content, created_at"
+            )
+            .in(
+                "conversation_id",
+                conversationIds
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+
+    ]);
+
+
+    const members =
+        membersResult.data || [];
+
+    const messages =
+        messagesResult.data || [];
+
+
+    if (membersResult.error) {
+
+        console.error(
+            "Gagal mengambil member:",
+            membersResult.error
+        );
+
+        return;
     }
 
-}
+
+    if (messagesResult.error) {
+
+        console.error(
+            "Gagal mengambil pesan:",
+            messagesResult.error
+        );
+
+        return;
+    }
 
 
+    // ==========================
+    // CARI LAWAN CHAT
+    // ==========================
 
-// ==========================
-// ENTER UNTUK KIRIM
-// ==========================
+    const otherUsers =
+        new Map();
 
-function handleMessageKey(event) {
+
+    members.forEach(
+        function(member) {
+
+            if (
+                String(member.user_id) ===
+                String(currentUserId)
+            ) {
+                return;
+            }
+
+
+            otherUsers.set(
+                member.conversation_id,
+                member.user_id
+            );
+
+        }
+    );
+
+
+    // ==========================
+    // AMBIL PESAN TERAKHIR
+    // SETIAP CONVERSATION
+    // ==========================
+
+    const latestMessages =
+        new Map();
+
+
+    messages.forEach(
+        function(message) {
+
+            if (
+                !latestMessages.has(
+                    message.conversation_id
+                )
+            ) {
+
+                latestMessages.set(
+                    message.conversation_id,
+                    message
+                );
+
+            }
+
+        }
+    );
+
+
+    // ==========================
+    // AMBIL USER ID LAWAN CHAT
+    // YANG BENAR-BENAR PUNYA PESAN
+    // ==========================
+
+    const otherUserIds =
+        Array.from(
+            latestMessages.keys()
+        )
+        .map(
+            function(conversationId) {
+
+                return otherUsers.get(
+                    conversationId
+                );
+
+            }
+        )
+        .filter(
+            function(userId) {
+
+                return !!userId;
+
+            }
+        );
+
+
+    // ==========================
+    // TIDAK ADA CHAT
+    // ==========================
 
     if (
-        event.key === "Enter"
+        otherUserIds.length === 0
     ) {
 
-        event.preventDefault();
+        container.innerHTML = `
+            <div class="chat-empty">
+                Belum ada percakapan.
+            </div>
+        `;
 
-        sendMessage();
-
+        return;
     }
 
-}
 
+    // ==========================
+    // AMBIL SEMUA PROFILE
+    // SEKALIGUS
+    // ==========================
+
+    const {
+        data: profiles,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id, username, avatar"
+            )
+            .in(
+                "id",
+                otherUserIds
+            );
+
+
+    if (profileError) {
+
+        console.error(
+            "Gagal mengambil profile:",
+            profileError
+        );
+
+        return;
+    }
+
+
+    // ==========================
+    // MAP PROFILE
+    // ==========================
+
+    const profileMap =
+        new Map();
+
+
+    (profiles || []).forEach(
+        function(profile) {
+
+            profileMap.set(
+                profile.id,
+                profile
+            );
+
+        }
+    );
+
+
+    // ==========================
+    // BUAT DATA CHAT
+    // ==========================
+
+    const chatMap =
+        new Map();
+
+
+    latestMessages.forEach(
+        function(
+            lastMessage,
+            conversationId
+        ) {
+
+            const otherUserId =
+                otherUsers.get(
+                    conversationId
+                );
+
+
+            if (!otherUserId) {
+                return;
+            }
+
+
+            const profile =
+                profileMap.get(
+                    otherUserId
+                );
+
+
+            if (!profile) {
+                return;
+            }
+
+
+            const existingChat =
+                chatMap.get(
+                    otherUserId
+                );
+
+
+            // Jika user punya lebih dari
+            // satu conversation dengan orang sama,
+            // ambil yang pesannya paling baru.
+
+            if (
+                !existingChat ||
+                new Date(
+                    lastMessage.created_at
+                ) >
+                new Date(
+                    existingChat.lastMessage.created_at
+                )
+            ) {
+
+                chatMap.set(
+                    otherUserId,
+                    {
+                        conversationId:
+                            conversationId,
+
+                        userId:
+                            profile.id,
+
+                        username:
+                            profile.username,
+
+                        avatar:
+                            profile.avatar,
+
+                        lastMessage:
+                            lastMessage
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    // ==========================
+    // UBAH MENJADI ARRAY
+    // ==========================
+
+    const chats =
+        Array.from(
+            chatMap.values()
+        );
+
+
+    // ==========================
+    // URUTKAN CHAT TERBARU
+    // ==========================
+
+    chats.sort(
+        function(a, b) {
+
+            return (
+                new Date(
+                    b.lastMessage.created_at
+                ) -
+                new Date(
+                    a.lastMessage.created_at
+                )
+            );
+
+        }
+    );
+
+
+    // ==========================
+    // BELUM ADA CHAT
+    // ==========================
+
+    if (
+        chats.length === 0
+    ) {
+
+        container.innerHTML = `
+            <div class="chat-empty">
+                Belum ada percakapan.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    // ==========================
+    // TAMPILKAN CHAT
+    // ==========================
+
+    chats.forEach(
+        function(chat) {
+
+            const item =
+                document.createElement(
+                    "button"
+                );
+
+
+            item.className =
+                "conversation-item";
+
+
+            // ==========================
+            // BUKA ROOM CHAT
+            // ==========================
+
+            item.onclick =
+                function() {
+
+                    startChat(
+                        chat.userId,
+                        chat.username
+                    );
+
+                };
+
+
+            // ==========================
+            // AVATAR
+            // ==========================
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+
+            avatar.className =
+                "conversation-avatar";
+
+
+            const initial =
+                chat.username
+                    ? chat.username
+                        .charAt(0)
+                        .toUpperCase()
+                    : "?";
+
+
+            avatar.textContent =
+                initial;
+
+
+            // ==========================
+            // INFO CHAT
+            // ==========================
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "conversation-info";
+
+
+            const username =
+                document.createElement(
+                    "strong"
+                );
+
+
+            username.textContent =
+                "@" + chat.username;
+
+
+            const message =
+                document.createElement(
+                    "span"
+                );
+
+
+            message.textContent =
+                chat.lastMessage.content;
+
+
+            info.appendChild(
+                username
+            );
+
+
+            info.appendChild(
+                message
+            );
+
+
+            // ==========================
+            // MASUKKAN KE ITEM
+            // ==========================
+
+            item.appendChild(
+                avatar
+            );
+
+
+            item.appendChild(
+                info
+            );
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
 
 function startChat(
     userId,
@@ -4353,6 +4968,29 @@ function startChat(
     activeChatUsername = username;
 
     activeConversationId = null;
+    
+
+    // ==========================
+// SEMBUNYIKAN DAFTAR CHAT
+// ==========================
+
+const conversationList =
+    document.getElementById(
+        "conversationList"
+    );
+
+if (conversationList) {
+    conversationList.style.display = "none";
+}
+
+const userResults =
+    document.getElementById(
+        "userResults"
+    );
+
+if (userResults) {
+    userResults.style.display = "none";
+}
 
 
     document
@@ -4728,14 +5366,116 @@ function addMessageToChat(
         );
 
 
-    bubble.textContent =
+    // ==========================
+    // ISI PESAN
+    // ==========================
+
+    const text =
+        document.createElement("div");
+
+    text.textContent =
         message.content;
+
+
+    // ==========================
+    // WAKTU PESAN
+    // ==========================
+
+    const time =
+        document.createElement("span");
+
+    time.className =
+        "message-time";
+
+
+    if (message.created_at) {
+
+        const date =
+            new Date(
+                message.created_at
+            );
+
+        // ==========================
+// FORMAT WAKTU PESAN
+// ==========================
+
+const now =
+    new Date();
+
+const today =
+    now.toDateString();
+
+const messageDate =
+    date.toDateString();
+
+if (
+    messageDate === today
+) {
+
+    // Hari ini → 10:42
+
+    time.textContent =
+        date.toLocaleTimeString(
+            "id-ID",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+} else {
+
+    // Tanggal sebelumnya
+    // → 30 Sep, 10:42
+
+    time.textContent =
+        date.toLocaleDateString(
+            "id-ID",
+            {
+                day: "numeric",
+                month: "short"
+            }
+        ) +
+        ", " +
+        date.toLocaleTimeString(
+            "id-ID",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+}
+
+    }
+
+
+    // ==========================
+    // MASUKKAN KE BUBBLE
+    // ==========================
+
+    bubble.appendChild(
+        text
+    );
+
+
+    if (message.created_at) {
+
+        bubble.appendChild(
+            time
+        );
+
+    }
 
 
     container.appendChild(
         bubble
     );
 
+
+    // ==========================
+    // AUTO SCROLL
+    // ==========================
 
     container.scrollTop =
         container.scrollHeight;
@@ -5973,7 +6713,7 @@ function filterNotes() {
 // ==========================
 
 loadNotes();
-
+loadChatHistory();
 
 </script>
 
