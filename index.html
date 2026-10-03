@@ -165,32 +165,65 @@
 }
 
 /* =========================
-   CHAT
+   CHAT NAVIGATION
 ========================= */
 
 .chat-nav-btn {
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    gap: 7px;
 
-    padding: 8px 13px;
-    border-radius: 12px;
+    border: none;
+
+    background: transparent;
+
+    color: rgba(255,255,255,0.62);
+
+    padding: 8px 10px;
+
+    border-radius: 10px;
 
     cursor: pointer;
 
+    font-family: inherit;
     font-size: 13px;
     font-weight: 500;
 
-    transition: 0.2s ease;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 .chat-nav-btn:hover {
-    background: rgba(155,124,255,0.15);
-    border-color: rgba(155,124,255,0.25);
 
-    color: white;
+    background:
+        rgba(155,124,255,0.08);
+
+    color: #fff;
 
     transform: translateY(-1px);
+}
+
+.chat-nav-btn:first-letter {
+    font-size: 16px;
+}
+
+.chat-icon {
+    width: 17px;
+    height: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(255,255,255,0.65);
+}
+
+.chat-icon svg {
+    width: 17px;
+    height: 17px;
+    display: block;
 }
 
 /* ==========================
@@ -1753,6 +1786,10 @@
 
 .profile-wrapper {
     position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
 }
 
 .profile {
@@ -3446,7 +3483,22 @@
     class="chat-nav-btn"
     onclick="openChat()"
 >
-    💬
+    <span class="chat-icon">
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M20 11.5C20 15.64 16.42 19 12 19C10.74 19 9.56 18.73 8.53 18.25L4 20L5.35 16.05C4.5 14.79 4 13.21 4 11.5C4 7.36 7.58 4 12 4C16.42 4 20 7.36 20 11.5Z"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+        </svg>
+    </span>
+
     <span>Chat</span>
 </button>
 
@@ -5706,7 +5758,6 @@ function handleMessageKey(event) {
 
 }
 
-
 // ==========================
 // KEMBALI KE PENCARIAN USER
 // ==========================
@@ -5718,6 +5769,15 @@ function backToUserSearch() {
             "conversationView"
         );
 
+    const conversationList =
+        document.getElementById(
+            "conversationList"
+        );
+
+    const chatSearch =
+        document.querySelector(
+            ".chat-search"
+        );
 
     const userResults =
         document.getElementById(
@@ -5725,34 +5785,34 @@ function backToUserSearch() {
         );
 
 
-    const chatSearch =
-        document.querySelector(
-            ".chat-search"
-        );
-
-
-    const chatHeader =
-        document.querySelector(
-            ".chat-header"
-        );
-
+    // ==========================
+    // TUTUP ROOM CHAT
+    // ==========================
 
     if (conversationView) {
 
-        conversationView
-            .classList
-            .remove("show");
+        conversationView.classList.remove(
+            "show"
+        );
 
     }
 
 
-    if (userResults) {
+    // ==========================
+    // TAMPILKAN DAFTAR CHAT
+    // ==========================
 
-        userResults.style.display =
+    if (conversationList) {
+
+        conversationList.style.display =
             "flex";
 
     }
 
+
+    // ==========================
+    // TAMPILKAN SEARCH
+    // ==========================
 
     if (chatSearch) {
 
@@ -5762,17 +5822,34 @@ function backToUserSearch() {
     }
 
 
-    if (chatHeader) {
+    // ==========================
+    // SEMBUNYIKAN HASIL SEARCH
+    // ==========================
 
-        chatHeader.style.display =
-            "flex";
+    if (userResults) {
+
+        userResults.style.display =
+            "none";
 
     }
 
 
+    // ==========================
+    // RESET CHAT AKTIF
+    // ==========================
+
     activeChatUserId = null;
 
     activeChatUsername = null;
+
+    activeConversationId = null;
+
+
+    // ==========================
+    // REFRESH DAFTAR CHAT
+    // ==========================
+
+    loadConversations();
 
 }
 
