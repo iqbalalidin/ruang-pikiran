@@ -4339,6 +4339,66 @@
         rgba(120,90,240,0.35);
 
 }
+
+      /* =========================
+   TYPING INDICATOR
+========================= */
+
+.typing-indicator {
+    display: none;
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 6px 14px;
+
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.typing-indicator.show {
+    display: flex;
+}
+
+.typing-dots {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.typing-dots span {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+    animation: pikoraTyping 1.2s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes pikoraTyping {
+
+    0%,
+    60%,
+    100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
       
     </style>
 </head>
@@ -4920,6 +4980,21 @@
 
 
     <div class="message-input-area">
+
+      <div
+    id="typingIndicator"
+    class="typing-indicator"
+>
+    <span id="typingText">
+        Sedang mengetik
+    </span>
+
+    <span class="typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+    </span>
+      </div>
 
         <input
             id="messageInput"
@@ -6195,7 +6270,7 @@ if (userResults) {
 
         loadMessages();
   subscribeToChatRealtime();
-
+  subscribeToTypingRealtime();
 
     console.log(
         "CHAT USER:",
@@ -6994,6 +7069,391 @@ function subscribeToChatRealtime() {
                 }
             );
 }
+
+  // ==========================
+// TYPING INDICATOR REALTIME
+// ==========================
+
+let typingRealtimeChannel = null;
+
+let typingTimeout = null;
+
+let isCurrentlyTyping = false;
+
+
+// ==========================
+// NAMA CHANNEL TYPING
+// ==========================
+
+function getTypingChannelName(
+    currentUserId,
+    targetUserId
+) {
+
+    const ids = [
+        currentUserId,
+        targetUserId
+    ].sort();
+
+    return "typing-" + ids[0] + "-" + ids[1];
+}
+
+
+// ==========================
+// SUBSCRIBE TYPING REALTIME
+// ==========================
+
+async function subscribeToTypingRealtime() {
+
+    // Hapus channel lama
+    if (typingRealtimeChannel) {
+
+        supabaseClient.removeChannel(
+            typingRealtimeChannel
+        );
+
+        typingRealtimeChannel = null;
+    }
+
+
+    if (!activeChatUserId) {
+        return;
+    }
+
+
+    // Ambil user yang sedang login
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (
+        error ||
+        !data ||
+        !data.user
+    ) {
+
+        console.error(
+            "Gagal mendapatkan user untuk typing:",
+            error
+        );
+
+        return;
+    }
+
+
+    const currentUserId =
+        data.user.id;
+
+
+    // Channel dibuat berdasarkan
+    // kedua user sehingga keduanya
+    // menggunakan channel yang sama
+    const channelName =
+        getTypingChannelName(
+            currentUserId,
+            activeChatUserId
+        );
+
+
+    typingRealtimeChannel =
+        supabaseClient
+            .channel(channelName);
+
+
+    // ==========================
+    // MENERIMA EVENT TYPING
+    // ==========================
+
+    typingRealtimeChannel.on(
+        "broadcast",
+        {
+            event: "typing"
+        },
+        function(payload) {
+
+            const senderId =
+                payload.payload?.sender_id;
+
+
+            // Abaikan event milik sendiri
+            if (
+                senderId === currentUserId
+            ) {
+                return;
+            }
+
+
+            // Pastikan masih di room yang sama
+            if (!activeChatUserId) {
+                return;
+            }
+
+
+            showTypingIndicator();
+        }
+    );
+
+
+    // ==========================
+    // MENERIMA EVENT STOP TYPING
+    // ==========================
+
+    typingRealtimeChannel.on(
+        "broadcast",
+        {
+            event: "stopped_typing"
+        },
+        function(payload) {
+
+            const senderId =
+                payload.payload?.sender_id;
+
+
+            if (
+                senderId === currentUserId
+            ) {
+                return;
+            }
+
+
+            hideTypingIndicator();
+        }
+    );
+
+
+    // Subscribe
+    typingRealtimeChannel.subscribe(
+        function(status) {
+
+            console.log(
+                "TYPING REALTIME STATUS:",
+                status
+            );
+
+        }
+    );
+}
+
+
+// ==========================
+// USER MULAI MENGETIK
+// ==========================
+
+async function sendTypingEvent() {
+
+    if (!typingRealtimeChannel) {
+        return;
+    }
+
+
+    if (!activeChatUserId) {
+        return;
+    }
+
+
+    // Kalau sebelumnya belum mengetik,
+    // kirim event typing
+    if (!isCurrentlyTyping) {
+
+        isCurrentlyTyping = true;
+
+
+        await typingRealtimeChannel.send({
+
+            type: "broadcast",
+
+            event: "typing",
+
+            payload: {
+                sender_id:
+                    (
+                        await supabaseClient
+                            .auth
+                            .getUser()
+                    ).data.user.id
+            }
+
+        });
+
+
+        console.log(
+            "TYPING EVENT DIKIRIM"
+        );
+    }
+
+
+    // Reset timer setiap kali
+    // user mengetik karakter baru
+    clearTimeout(
+        typingTimeout
+    );
+
+
+    typingTimeout =
+        setTimeout(
+            stopTypingEvent,
+            1200
+        );
+}
+
+
+// ==========================
+// USER BERHENTI MENGETIK
+// ==========================
+
+async function stopTypingEvent() {
+
+    clearTimeout(
+        typingTimeout
+    );
+
+
+    if (
+        !typingRealtimeChannel
+    ) {
+        isCurrentlyTyping = false;
+        return;
+    }
+
+
+    if (
+        !isCurrentlyTyping
+    ) {
+        return;
+    }
+
+
+    isCurrentlyTyping = false;
+
+
+    const {
+        data
+    } =
+        await supabaseClient
+            .auth
+            .getUser();
+
+
+    if (
+        !data ||
+        !data.user
+    ) {
+        return;
+    }
+
+
+    await typingRealtimeChannel.send({
+
+        type: "broadcast",
+
+        event: "stopped_typing",
+
+        payload: {
+            sender_id:
+                data.user.id
+        }
+
+    });
+
+
+    console.log(
+        "STOP TYPING EVENT DIKIRIM"
+    );
+}
+
+
+// ==========================
+// TAMPILKAN INDICATOR
+// ==========================
+
+function showTypingIndicator() {
+
+    const indicator =
+        document.getElementById(
+            "typingIndicator"
+        );
+
+
+    if (!indicator) {
+        return;
+    }
+
+
+    indicator.classList.add(
+        "show"
+    );
+}
+
+
+// ==========================
+// SEMBUNYIKAN INDICATOR
+// ==========================
+
+function hideTypingIndicator() {
+
+    const indicator =
+        document.getElementById(
+            "typingIndicator"
+        );
+
+
+    if (!indicator) {
+        return;
+    }
+
+
+    indicator.classList.remove(
+        "show"
+    );
+}
+
+  // ==========================
+// LISTENER MESSAGE INPUT
+// ==========================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const input =
+            document.getElementById(
+                "messageInput"
+            );
+
+
+        if (!input) {
+            return;
+        }
+
+
+        input.addEventListener(
+            "input",
+            function() {
+
+                // Kalau input kosong,
+                // langsung dianggap berhenti mengetik
+                if (
+                    input.value.trim() === ""
+                ) {
+
+                    stopTypingEvent();
+
+                    return;
+                }
+
+
+                sendTypingEvent();
+
+            }
+        );
+
+    }
+);
   
 // ==========================
 // KEMBALI KE PENCARIAN USER
@@ -7009,6 +7469,23 @@ function backToUserSearch() {
 
     chatRealtimeChannel = null;
   }
+
+  if (typingRealtimeChannel) {
+
+    supabaseClient.removeChannel(
+        typingRealtimeChannel
+    );
+
+    typingRealtimeChannel = null;
+}
+
+clearTimeout(
+    typingTimeout
+);
+
+isCurrentlyTyping = false;
+
+hideTypingIndicator();
 
     const conversationView =
         document.getElementById(
