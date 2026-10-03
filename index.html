@@ -7012,6 +7012,47 @@ container.innerHTML = "";
         return;
     }
 
+  // ==========================
+// MARK PESAN SEBAGAI READ
+// ==========================
+
+const {
+    error: readError
+} =
+    await supabaseClient
+        .from("messages")
+        .update({
+            is_read: true
+        })
+        .eq(
+            "conversation_id",
+            conversationId
+        )
+        .eq(
+            "sender_id",
+            targetUserId
+        )
+        .eq(
+            "is_read",
+            false
+        );
+
+
+if (readError) {
+
+    console.error(
+        "GAGAL MENANDAI PESAN SEBAGAI READ:",
+        readError
+    );
+
+} else {
+
+    console.log(
+        "PESAN LAWAN BERHASIL DITANDAI READ"
+    );
+
+}
+
 
     if (
         !messages ||
@@ -8701,7 +8742,6 @@ async function confirmExit() {
 // ==========================
 
 loadNotes();
-loadChatHistory();
 
 </script>
 
