@@ -2849,6 +2849,47 @@
         rgba(0,0,0,0.6) !important;
 }
 
+      <!-- =========================
+     EXIT CONFIRMATION MODAL
+========================= -->
+
+<div id="exitConfirmModal" class="exit-confirm-overlay">
+
+    <div class="exit-confirm-box">
+
+        <div class="exit-confirm-icon">
+            ↗
+        </div>
+
+        <h2>Apakah kamu yakin ingin keluar?</h2>
+
+        <p>
+            Kamu akan kembali ke halaman masuk.
+            Sesi akunmu akan diakhiri.
+        </p>
+
+        <div class="exit-confirm-actions">
+
+            <button
+                type="button"
+                class="exit-cancel-btn"
+                onclick="closeExitConfirm()">
+                Batal
+            </button>
+
+            <button
+                type="button"
+                class="exit-confirm-btn"
+                onclick="confirmExit()">
+                Keluar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+      
 /* =========================
    NOTE ACTION BUTTONS
 ========================= */
@@ -4068,6 +4109,234 @@
     .public-save {
         width: 100%;
     }
+
+}
+
+      /* =========================
+   EXIT CONFIRMATION MODAL
+========================= */
+
+.exit-confirm-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(5, 5, 12, 0.72);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 10000;
+}
+
+.exit-confirm-overlay.show {
+    display: flex;
+}
+
+/* BOX */
+
+.exit-confirm-box {
+    width: min(390px, 100%);
+
+    padding: 30px 26px;
+
+    text-align: center;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 30, 45, 0.97),
+            rgba(18, 18, 28, 0.99)
+        );
+
+    border: 1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.55);
+
+    animation:
+        exitModalIn 0.22s ease;
+}
+
+@keyframes exitModalIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px)
+            scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+/* ICON */
+
+.exit-confirm-icon {
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(155,124,255,0.18),
+            rgba(94,231,223,0.12)
+        );
+
+    border:
+        1px solid rgba(155,124,255,0.22);
+
+    color: #c7bcff;
+
+    font-size: 25px;
+
+}
+
+/* TITLE */
+
+.exit-confirm-box h2 {
+
+    margin: 0 0 10px;
+
+    color: #fff;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+}
+
+/* DESCRIPTION */
+
+.exit-confirm-box p {
+
+    margin: 0 auto;
+
+    max-width: 300px;
+
+    color:
+        rgba(255,255,255,0.55);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+/* BUTTON AREA */
+
+.exit-confirm-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+/* CANCEL */
+
+.exit-cancel-btn {
+
+    flex: 1;
+
+    padding: 11px 16px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    background:
+        rgba(255,255,255,0.04);
+
+    color:
+        rgba(255,255,255,0.70);
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition: 0.2s ease;
+}
+
+.exit-cancel-btn:hover {
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #fff;
+
+}
+
+/* EXIT */
+
+.exit-confirm-btn {
+
+    flex: 1;
+
+    padding: 11px 16px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9b7cff,
+            #6f5ce7
+        );
+
+    color: #fff;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 7px 20px
+        rgba(120,90,240,0.25);
+
+    transition: 0.2s ease;
+}
+
+.exit-confirm-btn:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(120,90,240,0.35);
 
 }
       
@@ -7623,8 +7892,8 @@ function filterNotes() {
     renderNotes(filtered);
 }
 
-  // ==========================
-// CEGAH BACK KE LOGIN
+// ==========================
+// BACK BUTTON PROTECTION
 // ==========================
 
 history.pushState(null, "", location.href);
@@ -7633,7 +7902,60 @@ window.addEventListener("popstate", function () {
 
     history.pushState(null, "", location.href);
 
+    openExitConfirm();
+
 });
+
+
+// ==========================
+// EXIT CONFIRMATION
+// ==========================
+
+function openExitConfirm() {
+
+    const modal =
+        document.getElementById(
+            "exitConfirmModal"
+        );
+
+    if (!modal) return;
+
+    modal.classList.add("show");
+}
+
+
+function closeExitConfirm() {
+
+    const modal =
+        document.getElementById(
+            "exitConfirmModal"
+        );
+
+    if (!modal) return;
+
+    modal.classList.remove("show");
+}
+
+
+async function confirmExit() {
+
+    const { error } =
+        await supabaseClient.auth.signOut();
+
+    if (error) {
+
+        console.error(
+            "Logout gagal:",
+            error
+        );
+
+        return;
+    }
+
+    window.location.replace(
+        "login.html"
+    );
+}
 
 // ==========================
 // JALANKAN SAAT WEBSITE DIBUKA
