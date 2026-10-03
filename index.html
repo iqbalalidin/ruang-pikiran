@@ -7623,6 +7623,17 @@ function filterNotes() {
     renderNotes(filtered);
 }
 
+  // ==========================
+// CEGAH BACK KE LOGIN
+// ==========================
+
+history.pushState(null, "", location.href);
+
+window.addEventListener("popstate", function () {
+
+    history.pushState(null, "", location.href);
+
+});
 
 // ==========================
 // JALANKAN SAAT WEBSITE DIBUKA
