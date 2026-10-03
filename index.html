@@ -3466,6 +3466,251 @@
 
 }
 
+      /* =========================
+   PIKORA - MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    /* BODY */
+    body {
+        overflow-x: hidden;
+    }
+
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    nav {
+        padding: 14px 18px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .profile-wrapper {
+        gap: 7px;
+    }
+
+    .chat-nav-btn {
+        padding: 8px 10px;
+        border-radius: 11px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+
+    .chat-nav-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-width: 72px;
+        height: 38px;
+
+        padding: 0 12px;
+
+        border: 1px solid rgba(155,124,255,0.22);
+
+        border-radius: 12px;
+
+        background:
+            rgba(155,124,255,0.10);
+
+        color: rgba(255,255,255,0.88);
+
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .chat-nav-btn > span:not(.chat-icon) {
+        display: inline;
+    }
+
+    .chat-nav-btn .chat-icon {
+        width: 18px;
+        height: 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #b5a4ff;
+    }
+
+    .chat-nav-btn .chat-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    }
+
+.chat-nav-btn .chat-icon {
+    display: flex;
+    width: 17px;
+    height: 17px;
+}
+
+    .chat-nav-btn .chat-icon {
+        font-size: 16px;
+    }
+
+    .profile {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+        padding: 55px 20px 35px;
+        text-align: center;
+    }
+
+    .hero small {
+        font-size: 10px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+        line-height: 1.15;
+        margin: 12px 0;
+    }
+
+    .hero p {
+        max-width: 330px;
+        margin: 0 auto;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================
+       WRITER
+    ========================= */
+
+    .writer {
+        padding: 0 16px;
+    }
+
+    .writer-box {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    #title {
+        font-size: 15px;
+    }
+
+    #content {
+        min-height: 180px;
+        font-size: 14px;
+    }
+
+    .writer-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .moods {
+        justify-content: center;
+    }
+
+    .save {
+        width: 100%;
+        padding: 12px;
+    }
+
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 20px 16px;
+    }
+
+    .dashboard-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================
+       MOOD SUMMARY
+    ========================= */
+
+    .mood-summary {
+        margin: 20px 16px;
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .mood-summary-header h2 {
+        font-size: 18px;
+    }
+
+
+    /* =========================
+       CHAT
+    ========================= */
+
+    .chat-panel {
+        width: calc(100% - 28px);
+        max-width: none;
+        max-height: calc(100vh - 30px);
+        margin: 15px auto;
+        border-radius: 20px;
+        box-sizing: border-box;
+    }
+
+    .chat-header {
+        padding: 17px;
+    }
+
+    .chat-header h2 {
+        font-size: 19px;
+    }
+
+    .conversation-view {
+        height: calc(100vh - 130px);
+        max-height: 650px;
+    }
+
+    .messages-container {
+        padding: 15px 2px;
+    }
+
+    .chat-message {
+        max-width: 82%;
+        font-size: 13px;
+    }
+
+    .message-input-area {
+        padding-top: 10px;
+    }
+
+    .message-input-area input {
+        font-size: 13px;
+    }
+
+    .send-message-btn {
+        width: 40px;
+        flex-shrink: 0;
+    }
+
+}
+      
     </style>
 </head>
 
