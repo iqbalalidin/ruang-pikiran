@@ -4399,6 +4399,29 @@
         transform: translateY(-3px);
     }
 }
+
+      /* =========================
+   MESSAGE READ STATUS
+========================= */
+
+.message-status {
+    display: inline-block;
+    margin-left: 5px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.message-status.delivered {
+    color: #4da3ff;
+}
+
+.message-status.read {
+    color: #4ade80;
+}
       
     </style>
 </head>
@@ -6684,28 +6707,59 @@ if (
 
     }
 
+  // ==========================
+// MASUKKAN KE BUBBLE
+// ==========================
 
-    // ==========================
-    // MASUKKAN KE BUBBLE
-    // ==========================
-
-    bubble.appendChild(
-        text
-    );
+bubble.appendChild(
+    text
+);
 
 
-    if (message.created_at) {
+// ==========================
+// STATUS PESAN D / R
+// ==========================
 
-        bubble.appendChild(
-            time
+if (
+    String(message.sender_id) ===
+    String(currentUserId)
+) {
+
+    const status =
+        document.createElement(
+            "span"
         );
 
-    }
+    status.className =
+        "message-status " +
+        (
+            message.is_read
+                ? "read"
+                : "delivered"
+        );
 
+    status.textContent =
+        message.is_read
+            ? "R"
+            : "D";
 
-    container.appendChild(
-        bubble
+    bubble.appendChild(
+        status
     );
+}
+
+
+// ==========================
+// WAKTU PESAN
+// ==========================
+
+if (message.created_at) {
+
+    bubble.appendChild(
+        time
+    );
+
+}
 
 
     // ==========================
