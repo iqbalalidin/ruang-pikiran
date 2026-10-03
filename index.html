@@ -6194,6 +6194,7 @@ if (userResults) {
         .focus();
 
         loadMessages();
+  subscribeToChatRealtime();
 
 
     console.log(
@@ -6865,11 +6866,149 @@ function handleMessageKey(event) {
 
 }
 
+  // ==========================
+// REALTIME CHAT
+// ==========================
+
+let chatRealtimeChannel = null;
+
+function subscribeToChatRealtime() {
+
+    // Hapus listener lama jika ada
+    if (chatRealtimeChannel) {
+
+        supabaseClient.removeChannel(
+            chatRealtimeChannel
+        );
+
+        chatRealtimeChannel = null;
+    }
+
+    if (!activeChatUserId) {
+        return;
+    }
+
+    // Buat channel baru
+    chatRealtimeChannel =
+        supabaseClient
+            .channel(
+                "chat-" + activeChatUserId
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "messages"
+                },
+                async function(payload) {
+
+                    console.log(
+                        "REALTIME PESAN BARU:",
+                        payload.new
+                    );
+
+                    // Pastikan room chat masih terbuka
+                    if (!activeChatUserId) {
+                        return;
+                    }
+
+                    // Ambil conversation ID dari pesan baru
+                    const newConversationId =
+                        payload.new.conversation_id;
+
+                    // Cari conversation aktif
+                    const {
+                        data: currentUserData
+                    } =
+                        await supabaseClient
+                            .auth
+                            .getUser();
+
+                    if (
+                        !currentUserData ||
+                        !currentUserData.user
+                    ) {
+                        return;
+                    }
+
+                    const currentUserId =
+                        currentUserData.user.id;
+
+                    const {
+                        data: activeConversationId,
+                        error
+                    } =
+                        await supabaseClient
+                            .rpc(
+                                "find_private_conversation",
+                                {
+                                    target_user_id:
+                                        activeChatUserId
+                                }
+                            );
+
+                    if (error) {
+
+                        console.error(
+                            "Gagal mencari conversation realtime:",
+                            error
+                        );
+
+                        return;
+                    }
+
+                    // Bukan conversation yang sedang dibuka
+                    if (
+                        String(newConversationId) !==
+                        String(activeConversationId)
+                    ) {
+                        return;
+                    }
+
+                    // Jangan tampilkan pesan milik sendiri
+                    // karena sendMessage() sudah menampilkannya
+                    if (
+                        String(payload.new.sender_id) ===
+                        String(currentUserId)
+                    ) {
+                        return;
+                    }
+
+                    // Tampilkan pesan baru
+                    addMessageToChat(
+                        payload.new,
+                        currentUserId
+                    );
+
+                }
+            )
+            .subscribe(
+                function(status) {
+
+                    console.log(
+                        "CHAT REALTIME STATUS:",
+                        status
+                    );
+
+                }
+            );
+}
+  
 // ==========================
 // KEMBALI KE PENCARIAN USER
 // ==========================
 
 function backToUserSearch() {
+
+  if (chatRealtimeChannel) {
+
+    supabaseClient.removeChannel(
+        chatRealtimeChannel
+    );
+
+    chatRealtimeChannel = null;
+  }
 
     const conversationView =
         document.getElementById(
