@@ -335,17 +335,22 @@
         .trim()
         .toLowerCase();
 
-            const result =
-    await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
+const {
+    data,
+    error
+} = await supabaseClient.auth.signUp({
 
-        options: {
-            data: {
-                username: username
-            }
+    email: email,
+
+    password: password,
+
+    options: {
+        data: {
+            username: username
         }
-    });
+    }
+
+});
 
             if (error) {
 
