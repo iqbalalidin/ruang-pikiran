@@ -3710,6 +3710,366 @@
     }
 
 }
+
+      /* =========================
+   SPACE SWITCHER
+========================= */
+
+.space-switcher {
+    width: min(720px, calc(100% - 32px));
+    margin: 0 auto 22px;
+
+    display: flex;
+    gap: 6px;
+
+    padding: 5px;
+
+    background: rgba(255,255,255,0.045);
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    border-radius: 15px;
+}
+
+.space-tab {
+    flex: 1;
+
+    border: none;
+
+    background: transparent;
+
+    color: rgba(255,255,255,0.48);
+
+    padding: 10px 14px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.space-tab:hover {
+    color: rgba(255,255,255,0.8);
+
+    background: rgba(255,255,255,0.04);
+}
+
+.space-tab.active {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(155,124,255,0.25),
+            rgba(94,231,223,0.10)
+        );
+
+    border: 1px solid
+        rgba(155,124,255,0.20);
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.12);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .space-switcher {
+        width: calc(100% - 32px);
+
+        margin-bottom: 18px;
+    }
+
+    .space-tab {
+        padding: 10px 8px;
+
+        font-size: 12px;
+    }
+
+}
+
+      /* =========================
+   PUBLIC SPACE
+========================= */
+
+.public-space {
+    display: none;
+
+    width: min(720px, calc(100% - 32px));
+
+    margin: 0 auto 40px;
+}
+
+.public-space.show {
+    display: block;
+}
+
+
+.public-intro {
+    text-align: center;
+
+    margin-bottom: 22px;
+}
+
+
+.public-label {
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    color: #9b7cff;
+
+    font-weight: 700;
+}
+
+
+.public-intro h2 {
+    margin: 10px 0 6px;
+
+    font-size: 26px;
+
+    color: #fff;
+}
+
+
+.public-intro p {
+    margin: 0 auto;
+
+    max-width: 430px;
+
+    color: #777586;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   PUBLIC WRITER
+========================= */
+
+.public-writer {
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0,0,0,0.12);
+}
+
+
+.public-writer input,
+.public-writer textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-family: inherit;
+}
+
+
+.public-writer input {
+    font-size: 16px;
+
+    font-weight: 600;
+
+    margin-bottom: 12px;
+}
+
+
+.public-writer textarea {
+    min-height: 150px;
+
+    resize: vertical;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.public-writer input::placeholder,
+.public-writer textarea::placeholder {
+    color: rgba(255,255,255,0.35);
+}
+
+
+.public-writer-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.06);
+}
+
+
+.public-save {
+    white-space: nowrap;
+}
+
+
+/* =========================
+   PUBLIC FEED
+========================= */
+
+.public-feed {
+    margin-top: 35px;
+}
+
+
+.public-feed-header {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    margin-bottom: 15px;
+}
+
+
+.public-feed-header h2 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 20px;
+}
+
+
+.public-feed-header span {
+    color: #777586;
+
+    font-size: 12px;
+}
+
+
+.public-feed-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.public-empty {
+    text-align: center;
+
+    padding: 40px 20px;
+
+    border:
+        1px dashed
+        rgba(255,255,255,0.10);
+
+    border-radius: 18px;
+
+    color: #777586;
+}
+
+
+.public-empty div {
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+.public-empty strong {
+    display: block;
+
+    color: rgba(255,255,255,0.75);
+
+    font-size: 14px;
+}
+
+
+.public-empty p {
+    margin: 7px 0 0;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .public-space {
+        width: calc(100% - 32px);
+    }
+
+
+    .public-intro h2 {
+        font-size: 23px;
+    }
+
+
+    .public-writer {
+        padding: 17px;
+
+        border-radius: 18px;
+    }
+
+
+    .public-writer-bottom {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .public-writer-bottom .moods {
+        justify-content: center;
+    }
+
+
+    .public-save {
+        width: 100%;
+    }
+
+}
       
     </style>
 </head>
@@ -3784,6 +4144,30 @@
 
     </section>
 
+  <!-- =========================
+     RUANG PILIHAN
+========================= -->
+
+<div class="space-switcher">
+
+    <button
+        class="space-tab active"
+        onclick="switchSpace('private')"
+        id="privateSpaceBtn"
+    >
+        🔒 Pribadi
+    </button>
+
+    <button
+        class="space-tab"
+        onclick="switchSpace('public')"
+        id="publicSpaceBtn"
+    >
+        🌎 Publik
+    </button>
+
+</div>
+
 
     <section class="writer">
 
@@ -3836,6 +4220,133 @@
         </div>
 
     </section>
+
+  <!-- =========================
+     PUBLIC SPACE
+========================= -->
+
+<section
+    class="public-space"
+    id="publicSpace"
+>
+
+    <div class="public-intro">
+
+        <span class="public-label">
+            🌎 RUANG PUBLIK
+        </span>
+
+        <h2>
+            Bagikan sesuatu.
+        </h2>
+
+        <p>
+            Tulis sesuatu yang ingin kamu bagikan
+            kepada orang-orang di Pikora.
+        </p>
+
+    </div>
+
+
+    <!-- PUBLIC WRITER -->
+
+    <div class="public-writer">
+
+        <input
+            id="publicTitle"
+            type="text"
+            placeholder="Judul postingan..."
+        >
+
+        <textarea
+            id="publicContent"
+            placeholder="Apa yang ingin kamu bagikan?"
+        ></textarea>
+
+
+        <div class="public-writer-bottom">
+
+            <div class="moods">
+
+                <div class="mood active">
+                    😊
+                </div>
+
+                <div class="mood">
+                    😌
+                </div>
+
+                <div class="mood">
+                    😔
+                </div>
+
+                <div class="mood">
+                    😡
+                </div>
+
+                <div class="mood">
+                    😰
+                </div>
+
+            </div>
+
+
+            <button
+                class="save public-save"
+                onclick="createPublicPost()"
+            >
+                🌎 Publikasikan
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEED -->
+
+    <div class="public-feed">
+
+        <div class="public-feed-header">
+
+            <h2>
+                Feed
+            </h2>
+
+            <span>
+                Catatan dari komunitas Pikora
+            </span>
+
+        </div>
+
+
+        <div
+            id="publicFeed"
+            class="public-feed-list"
+        >
+
+            <div class="public-empty">
+
+                <div>
+                    🌱
+                </div>
+
+                <strong>
+                    Belum ada postingan.
+                </strong>
+
+                <p>
+                    Jadilah yang pertama berbagi
+                    sesuatu di ruang publik.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- =========================
      DASHBOARD
@@ -4264,6 +4775,88 @@ function filterNotes() {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+  // ==========================
+// PINDAH RUANG
+// ==========================
+
+function switchSpace(space) {
+
+    const privateBtn =
+        document.getElementById(
+            "privateSpaceBtn"
+        );
+
+    const publicBtn =
+        document.getElementById(
+            "publicSpaceBtn"
+        );
+
+    const writer =
+        document.querySelector(
+            ".writer"
+        );
+
+    const publicSpace =
+        document.getElementById(
+            "publicSpace"
+        );
+
+
+    if (
+        !writer ||
+        !publicSpace
+    ) {
+        return;
+    }
+
+
+    if (space === "public") {
+
+        writer.style.display =
+            "none";
+
+        publicSpace.classList.add(
+            "show"
+        );
+
+        privateBtn.classList.remove(
+            "active"
+        );
+
+        publicBtn.classList.add(
+            "active"
+        );
+
+        return;
+    }
+
+
+    publicSpace.classList.remove(
+        "show"
+    );
+
+    writer.style.display =
+        "";
+
+    publicBtn.classList.remove(
+        "active"
+    );
+
+    privateBtn.classList.add(
+        "active"
+    );
+
+}
+
+
+function createPublicPost() {
+
+    alert(
+        "Fitur publik akan segera tersedia 🌎"
+    );
+
+}
 
 const SUPABASE_URL =
     "https://gcaztzukpotpsdkcjkwn.supabase.co";
