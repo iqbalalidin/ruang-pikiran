@@ -4422,6 +4422,28 @@
 .message-status.read {
     color: #4ade80;
 }
+
+      .message-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 3px;
+}
+
+.message-status {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.message-status.delivered {
+    color: #4da3ff;
+}
+
+.message-status.read {
+    color: #4ade80;
+}
       
     </style>
 </head>
@@ -6716,10 +6738,76 @@ bubble.appendChild(
 );
 
 
+// ==========================
+// META PESAN
+// STATUS + WAKTU
+// ==========================
+
+const meta =
+    document.createElement(
+        "div"
+    );
+
+meta.className =
+    "message-meta";
+
+
+// ==========================
+// STATUS D / R
+// ==========================
+
+if (
+    String(message.sender_id) ===
+    String(currentUserId)
+) {
+
+    const status =
+        document.createElement(
+            "span"
+        );
+
+    status.className =
+        "message-status " +
+        (
+            message.is_read
+                ? "read"
+                : "delivered"
+        );
+
+    status.textContent =
+        message.is_read
+            ? "R"
+            : "D";
+
+    meta.appendChild(
+        status
+    );
+}
+
+
+// ==========================
+// WAKTU
+// ==========================
+
 if (message.created_at) {
 
-    bubble.appendChild(
+    meta.appendChild(
         time
+    );
+
+}
+
+
+// ==========================
+// MASUKKAN META
+// ==========================
+
+if (
+    meta.children.length > 0
+) {
+
+    bubble.appendChild(
+        meta
     );
 
 }
