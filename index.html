@@ -6707,7 +6707,7 @@ if (
 
     }
 
-  // ==========================
+// ==========================
 // MASUKKAN KE BUBBLE
 // ==========================
 
@@ -6716,37 +6716,18 @@ bubble.appendChild(
 );
 
 
-// ==========================
-// STATUS PESAN D / R
-// ==========================
-
-if (
-    String(message.sender_id) ===
-    String(currentUserId)
-) {
-
-    const status =
-        document.createElement(
-            "span"
-        );
-
-    status.className =
-        "message-status " +
-        (
-            message.is_read
-                ? "read"
-                : "delivered"
-        );
-
-    status.textContent =
-        message.is_read
-            ? "R"
-            : "D";
+if (message.created_at) {
 
     bubble.appendChild(
-        status
+        time
     );
+
 }
+
+
+container.appendChild(
+    bubble
+);
 
 
 // ==========================
