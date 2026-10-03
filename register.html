@@ -328,17 +328,24 @@
 
             // Daftar ke Supabase
 
-            const {
-                data,
-                error
-            } = await supabaseClient.auth.signUp({
+          const username =
+    document
+        .getElementById("username")
+        .value
+        .trim()
+        .toLowerCase();
 
-                email: email,
+            const result =
+    await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
 
-                password: password
-
-            });
-
+        options: {
+            data: {
+                username: username
+            }
+        }
+    });
 
             if (error) {
 
