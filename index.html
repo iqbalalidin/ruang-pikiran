@@ -6669,40 +6669,6 @@ function addMessageToChat(
     text.textContent =
         message.content;
 
-  // ==========================
-// STATUS PESAN
-// ==========================
-
-if (
-    String(message.sender_id) ===
-    String(currentUserId)
-) {
-
-    const status =
-        document.createElement("span");
-
-    status.className =
-        "message-status";
-
-    status.dataset.messageId =
-        message.id;
-
-    if (message.is_read) {
-
-        status.textContent = "R";
-        status.classList.add("read");
-
-    } else {
-
-        status.textContent = "D";
-        status.classList.add("delivered");
-
-    }
-
-    bubble.appendChild(status);
-}
-
-
     // ==========================
     // WAKTU PESAN
     // ==========================
