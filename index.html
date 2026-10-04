@@ -6786,6 +6786,9 @@ if (
                 : "delivered"
         );
 
+  status.dataset.messageId =
+    message.id;
+
     status.textContent =
         message.is_read
             ? "R"
