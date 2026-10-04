@@ -5196,13 +5196,31 @@ function filterNotes() {
 
   }
 
-  function uploadProfileAvatar(input) {
+  async function uploadProfileAvatar(input) {
 
     const file = input.files[0];
 
     if (!file) {
         return;
     }
+
+    const {
+        data: {
+            user
+        },
+        error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+
+        alert("Kamu belum login.");
+
+        return;
+    }
+
+    // =========================
+    // PREVIEW FOTO
+    // =========================
 
     const reader = new FileReader();
 
@@ -5231,6 +5249,57 @@ function filterNotes() {
     };
 
     reader.readAsDataURL(file);
+
+
+    // =========================
+    // UPLOAD KE SUPABASE
+    // =========================
+
+    const fileExt =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+    const filePath =
+        user.id +
+        "/avatar." +
+        fileExt;
+
+
+    const {
+        error: uploadError
+    } =
+        await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true
+                }
+            );
+
+
+    if (uploadError) {
+
+        console.error(
+            "UPLOAD AVATAR ERROR:",
+            uploadError
+        );
+
+        alert(
+            "Gagal mengupload foto: " +
+            uploadError.message
+        );
+
+        return;
+    }
+
+    console.log(
+        "Foto berhasil diupload!"
+    );
 
   }
   
