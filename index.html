@@ -22,8 +22,7 @@
             color: #fff;
             min-height: 100vh;
         }
-
-        /* =========================
+/* =========================
    EDIT NOTE MODAL - MODERN
 ========================= */
 
@@ -4444,6 +4443,20 @@
 .message-status.read {
     color: #4ade80;
 }
+
+      .message-status {
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.message-status.delivered {
+    color: #4da6ff;
+}
+
+.message-status.read {
+    color: #39d98a;
+}
       
     </style>
 </head>
@@ -6656,6 +6669,39 @@ function addMessageToChat(
     text.textContent =
         message.content;
 
+  // ==========================
+// STATUS PESAN
+// ==========================
+
+if (
+    String(message.sender_id) ===
+    String(currentUserId)
+) {
+
+    const status =
+        document.createElement("span");
+
+    status.className =
+        "message-status";
+
+    status.dataset.messageId =
+        message.id;
+
+    if (message.is_read) {
+
+        status.textContent = "R";
+        status.classList.add("read");
+
+    } else {
+
+        status.textContent = "D";
+        status.classList.add("delivered");
+
+    }
+
+    bubble.appendChild(status);
+}
+
 
     // ==========================
     // WAKTU PESAN
@@ -7158,6 +7204,7 @@ function subscribeToChatRealtime() {
                     schema: "public",
                     table: "messages"
                 },
+
                 async function(payload) {
 
                     console.log(
@@ -7240,6 +7287,89 @@ function subscribeToChatRealtime() {
 
                 }
             )
+
+    // ==========================
+// REALTIME STATUS READ
+// ==========================
+
+.on(
+    "postgres_changes",
+    {
+        event: "UPDATE",
+        schema: "public",
+        table: "messages"
+    },
+
+    function(payload) {
+
+        const message =
+            payload.new;
+
+        console.log(
+            "READ STATUS UPDATE:",
+            message
+        );
+
+
+        // ==========================
+        // HANYA KETIKA SUDAH DIREAD
+        // ==========================
+
+        if (
+            message.is_read !== true
+        ) {
+            return;
+        }
+
+
+        // ==========================
+        // CARI STATUS PESAN
+        // ==========================
+
+        const status =
+            document.querySelector(
+                '[data-message-id="' +
+                message.id +
+                '"]'
+            );
+
+
+        if (!status) {
+
+            console.log(
+                "STATUS PESAN TIDAK DITEMUKAN:",
+                message.id
+            );
+
+            return;
+        }
+
+
+        // ==========================
+        // D → R
+        // ==========================
+
+        status.textContent =
+            "R";
+
+
+        status.classList.remove(
+            "delivered"
+        );
+
+
+        status.classList.add(
+            "read"
+        );
+
+
+        console.log(
+            "STATUS PESAN BERUBAH DARI D KE R"
+        );
+
+    }
+)
+      
             .subscribe(
                 function(status) {
 
@@ -7636,7 +7766,8 @@ document.addEventListener(
 
     }
 );
-  
+
+
 // ==========================
 // KEMBALI KE PENCARIAN USER
 // ==========================
