@@ -4502,16 +4502,28 @@
     A
     </div>
 
-    <div
-        class="profile-menu"
-        id="profileMenu"
-    >
-        <button onclick="logout()">
-            🚪 Logout
-        </button>
-    </div>
+   <input
+    type="file"
+    id="avatarInput"
+    accept="image/*"
+    style="display: none;"
+    onchange="uploadProfileAvatar(this)"
+>
 
-</div>
+    <div
+    class="profile-menu"
+    id="profileMenu"
+>
+
+    <button onclick="openAvatarPicker()">
+        📷 Ganti Foto Profil
+    </button>
+
+    <button onclick="logout()">
+        🚪 Logout
+    </button>
+
+    </div>
 
     </nav>
 
