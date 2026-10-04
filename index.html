@@ -4495,10 +4495,11 @@
 </button>
 
     <div
-        class="profile"
-        onclick="toggleProfileMenu()"
-    >
-        A
+    class="profile"
+    id="profileAvatar"
+    onclick="toggleProfileMenu()"
+>
+    A
     </div>
 
     <div
@@ -8062,6 +8063,51 @@ async function loadNotes() {
         user.email
     );
 
+  // ==========================
+// LOAD PROFILE USERNAME
+// ==========================
+
+const {
+    data: profileData,
+    error: profileError
+} =
+    await supabaseClient
+        .from("profiles")
+        .select("username")
+        .eq(
+            "id",
+            user.id
+        )
+        .single();
+
+console.log(
+    "PROFILE USERNAME:",
+    profileData
+);
+
+
+if (
+    !profileError &&
+    profileData &&
+    profileData.username
+) {
+
+    const profileAvatar =
+        document.getElementById(
+            "profileAvatar"
+        );
+
+    if (profileAvatar) {
+
+        profileAvatar.textContent =
+            profileData.username
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
 
     const notesResult =
         await supabaseClient
