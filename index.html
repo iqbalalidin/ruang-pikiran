@@ -5185,6 +5185,55 @@ function filterNotes() {
     renderNotes(filtered);
 }
 
+  function openAvatarPicker() {
+
+    const input =
+        document.getElementById("avatarInput");
+
+    if (input) {
+        input.click();
+    }
+
+  }
+
+  function uploadProfileAvatar(input) {
+
+    const file = input.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        const profileAvatar =
+            document.getElementById(
+                "profileAvatar"
+            );
+
+        if (profileAvatar) {
+
+            profileAvatar.style.backgroundImage =
+                `url("${event.target.result}")`;
+
+            profileAvatar.style.backgroundSize =
+                "cover";
+
+            profileAvatar.style.backgroundPosition =
+                "center";
+
+            profileAvatar.textContent = "";
+
+        }
+
+    };
+
+    reader.readAsDataURL(file);
+
+  }
+  
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
