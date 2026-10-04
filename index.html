@@ -7017,6 +7017,7 @@ container.innerHTML = "";
 // ==========================
 
 const {
+    data: readMessages,
     error: readError
 } =
     await supabaseClient
@@ -7035,8 +7036,25 @@ const {
         .eq(
             "is_read",
             false
-        );
+        )
+        .select("id, sender_id, is_read");
 
+
+if (readError) {
+
+    console.error(
+        "GAGAL MENANDAI PESAN SEBAGAI READ:",
+        readError
+    );
+
+} else {
+
+    console.log(
+        "HASIL UPDATE READ:",
+        readMessages
+    );
+
+          }
 
 if (readError) {
 
